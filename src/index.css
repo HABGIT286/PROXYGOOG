@@ -1,0 +1,472 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@layer base {
+  :root {
+    --accent: #e0be78;
+    --accent-2: #a87e3e;
+    --accent-light: #fae7be;
+    --accent-glow: rgba(224, 190, 120, 0.34);
+    --surface-bg: #080505;
+    --border-hairline: rgba(235, 199, 134, 0.32);
+    --font-en: "Syne", "Alexandria", sans-serif;
+    --font-ar: "Alexandria", "Tajawal", sans-serif;
+    --font-title-color: #f7ebd2;
+    --font-body-color: #f5efe4;
+    --font-muted-color: #cbbda9;
+    --font-glow-color: rgba(247, 235, 210, 0.22);
+    --site-luminance: 0.85;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  html {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: #080505;
+    overflow-x: hidden;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: transparent;
+    color: var(--font-body-color);
+    font-family: var(--font-ar), var(--font-en), sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: transparent;
+    color: inherit;
+  }
+
+  input,
+  textarea,
+  select,
+  .allow-copy-link {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+    -webkit-touch-callout: default !important;
+  }
+
+  input::selection,
+  textarea::selection,
+  .allow-copy-link::selection {
+    background: rgba(224, 190, 120, 0.35);
+    color: #fff7e6;
+  }
+}
+
+.font-display {
+  font-family: var(--font-en), var(--font-ar), sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.font-luxury {
+  font-family: var(--font-en), var(--font-ar), sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.font-arabic-display {
+  font-family: var(--font-ar), var(--font-en), sans-serif;
+}
+
+.font-mono-tech {
+  font-family: "JetBrains Mono", monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Smooth GPU-composited tab transition (no blur bleed) */
+@keyframes tabPanelReveal {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.tab-panel-enter {
+  animation: tabPanelReveal 0.24s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: opacity, transform;
+}
+
+/* =========================================================
+   900,000 CANDLEPOWER RADIANCE FLOODLIGHT RIG
+   ========================================================= */
+.el-radiance-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: calc(0.22 + var(--site-luminance) * 0.78);
+  background:
+    radial-gradient(
+      ellipse 78% 42% at 50% -6%,
+      color-mix(in srgb, var(--accent-light) 38%, transparent),
+      transparent 65%
+    ),
+    radial-gradient(
+      circle 520px at 85% 18%,
+      color-mix(in srgb, var(--accent) 22%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      circle 460px at 14% 72%,
+      rgba(255, 245, 224, 0.12),
+      transparent 72%
+    );
+  transition: opacity 0.25s ease;
+}
+
+/* =========================================================
+   UNIFIED ROYAL FONT COLOR (Single Cohesive Luxury Tone)
+   ========================================================= */
+.el-gold-text {
+  color: var(--font-title-color);
+  text-shadow:
+    0 1px calc(10px + var(--site-luminance) * 14px) var(--font-glow-color),
+    0 0 calc(2px + var(--site-luminance) * 4px) rgba(255, 248, 228, 0.22);
+}
+
+/* =========================================================
+   EARTHLINK PRO — HIGH-GLOSS CRYSTAL GLASSMORPHISM (5 PRESETS)
+   ========================================================= */
+.el-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(
+    146deg,
+    rgba(36, 25, 23, 0.56) 0%,
+    rgba(16, 12, 12, 0.68) 54%,
+    rgba(10, 7, 8, 0.76) 100%
+  );
+  border: 1px solid color-mix(in srgb, var(--accent-light) calc(24% + var(--site-luminance) * 26%), transparent);
+  box-shadow:
+    0 24px 62px rgba(0, 0, 0, 0.56),
+    0 0 calc(20px * var(--site-luminance)) color-mix(in srgb, var(--accent) calc(14% * var(--site-luminance)), transparent),
+    inset 0 1px 1px rgba(255, 248, 230, calc(0.24 + var(--site-luminance) * 0.34)),
+    inset 0 -1px 0 rgba(255, 240, 200, 0.08);
+  backdrop-filter: blur(26px) saturate(155%) brightness(calc(0.96 + var(--site-luminance) * 0.14));
+  -webkit-backdrop-filter: blur(26px) saturate(155%) brightness(calc(0.96 + var(--site-luminance) * 0.14));
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+/* High-gloss diagonal crystal reflection across cards */
+.el-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 252, 242, calc(0.06 + var(--site-luminance) * 0.08)) 0%,
+    rgba(255, 255, 255, 0.025) 26%,
+    transparent 44%,
+    rgba(255, 242, 210, calc(0.02 + var(--site-luminance) * 0.04)) 82%,
+    rgba(255, 255, 255, calc(0.04 + var(--site-luminance) * 0.05)) 100%
+  );
+  z-index: 0;
+}
+
+/* Razor-sharp diamond top rim specular highlight */
+.el-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 5%;
+  right: 5%;
+  height: 1.5px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(250, 231, 190, calc(0.45 + var(--site-luminance) * 0.45)) 38%,
+    rgba(255, 255, 255, calc(0.55 + var(--site-luminance) * 0.45)) 50%,
+    rgba(250, 231, 190, calc(0.45 + var(--site-luminance) * 0.45)) 62%,
+    transparent
+  );
+  z-index: 1;
+}
+
+.el-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Inner subtle card: NO nested backdrop-filter to prevent mobile Chromium blur glitches */
+.el-card-subtle {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    145deg,
+    rgba(30, 22, 20, 0.58) 0%,
+    rgba(13, 10, 10, 0.72) 100%
+  );
+  border: 1px solid rgba(248, 228, 186, calc(0.12 + var(--site-luminance) * 0.14));
+  box-shadow:
+    0 10px 26px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 244, 218, calc(0.1 + var(--site-luminance) * 0.16));
+}
+
+.el-card-subtle::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    130deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    transparent 45%
+  );
+  z-index: 0;
+}
+
+.el-card-subtle > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Dedicated Dock & TopBar Glass Container (Clean GPU isolation, no button smear) */
+.el-nav-glass {
+  position: relative;
+  isolation: isolate;
+  transform: translateZ(0);
+  background: linear-gradient(
+    180deg,
+    rgba(24, 17, 16, 0.86) 0%,
+    rgba(12, 9, 9, 0.92) 100%
+  );
+  border: 1px solid var(--border-hairline);
+  box-shadow:
+    0 18px 46px rgba(0, 0, 0, 0.72),
+    inset 0 1px 0 rgba(255, 240, 205, 0.22);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+}
+
+/* Preset 2: Crystal Polished */
+html[data-card-style="crystal-polished"] .el-card {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.09) 0%,
+    rgba(22, 18, 19, 0.38) 55%,
+    rgba(12, 10, 12, 0.5) 100%
+  );
+  border: 1px solid rgba(255, 248, 232, 0.32);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.52),
+    inset 0 1px 1px rgba(255, 255, 255, 0.45),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px) saturate(170%);
+  -webkit-backdrop-filter: blur(14px) saturate(170%);
+}
+
+html[data-card-style="crystal-polished"] .el-card-subtle {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(18, 15, 16, 0.42));
+  border-color: rgba(255, 248, 230, 0.22);
+}
+
+/* Preset 3: Tinted Chromatic Glass */
+html[data-card-style="tinted-glass"] .el-card {
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--accent) 18%, rgba(18, 12, 12, 0.64)) 0%,
+    color-mix(in srgb, var(--accent-2) 16%, rgba(10, 8, 9, 0.76)) 100%
+  );
+  border: 1px solid color-mix(in srgb, var(--accent) 52%, transparent);
+  box-shadow:
+    0 22px 60px rgba(0, 0, 0, 0.58),
+    0 0 36px color-mix(in srgb, var(--accent) 18%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+}
+
+html[data-card-style="tinted-glass"] .el-card-subtle {
+  background: color-mix(in srgb, var(--accent) 10%, rgba(14, 11, 11, 0.62));
+  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* Preset 4: Obsidian Matte */
+html[data-card-style="obsidian-matte"] .el-card {
+  background: linear-gradient(
+    165deg,
+    rgba(16, 14, 14, 0.88) 0%,
+    rgba(8, 7, 7, 0.94) 100%
+  );
+  border: 1px solid rgba(224, 190, 120, 0.22);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(12px) saturate(110%);
+  -webkit-backdrop-filter: blur(12px) saturate(110%);
+}
+
+html[data-card-style="obsidian-matte"] .el-card-subtle {
+  background: rgba(11, 9, 9, 0.86);
+  border-color: rgba(255, 255, 255, 0.09);
+}
+
+/* Preset 5: Liquid Prism */
+html[data-card-style="liquid-prism"] .el-card {
+  background: linear-gradient(
+    135deg,
+    rgba(38, 28, 28, 0.52) 0%,
+    rgba(18, 16, 22, 0.62) 50%,
+    color-mix(in srgb, var(--accent) 14%, rgba(12, 10, 12, 0.68)) 100%
+  );
+  border: 1px solid rgba(255, 240, 210, 0.34);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.6),
+    inset 0 0 32px rgba(255, 235, 190, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(30px) saturate(185%);
+  -webkit-backdrop-filter: blur(30px) saturate(185%);
+}
+
+html[data-card-style="liquid-prism"] .el-card-subtle {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(16, 13, 18, 0.56));
+  border-color: rgba(255, 235, 195, 0.24);
+}
+
+/* Liquid Champagne-Gold Action Button */
+.el-gold-btn {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    var(--accent-2) 0%,
+    var(--accent) 35%,
+    var(--accent-light) 55%,
+    var(--accent) 80%,
+    var(--accent-2) 100%
+  );
+  color: #161008;
+  border: 1px solid rgba(255, 242, 206, 0.72);
+  box-shadow:
+    0 8px 24px var(--accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    inset 0 -1px 0 rgba(120, 82, 25, 0.45);
+}
+
+/* Sculpted Glossy Icon Medallions */
+.el-medallion-gold {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, var(--accent-light) 0%, var(--accent) 50%, var(--accent-2) 100%);
+  border: 1px solid rgba(255, 243, 210, 0.78);
+  box-shadow:
+    0 8px 24px var(--accent-glow),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8),
+    inset 0 -2px 4px rgba(88, 58, 14, 0.5);
+}
+
+.el-medallion-glass {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, rgba(46, 33, 28, 0.85), rgba(16, 12, 11, 0.95));
+  border: 1px solid color-mix(in srgb, var(--accent) 36%, transparent);
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.48),
+    inset 0 1px 0 rgba(255, 244, 214, 0.22),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.65);
+}
+
+.el-medallion-emerald {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, rgba(16, 65, 48, 0.8), rgba(8, 28, 22, 0.92));
+  border: 1px solid rgba(74, 222, 128, 0.38);
+  box-shadow:
+    0 8px 22px rgba(16, 185, 129, 0.2),
+    inset 0 1px 0 rgba(167, 243, 208, 0.3);
+}
+
+/* Glossy Corner Specular Reflection on Medallions */
+.el-medallion-gold::after,
+.el-medallion-glass::after,
+.el-medallion-emerald::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  left: -25%;
+  width: 120%;
+  height: 70%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent);
+  transform: rotate(-18deg);
+  pointer-events: none;
+}
+
+/* Blinking green indicator strictly for live active proxies */
+@keyframes activeProxyBlink {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 12px #34d399, 0 0 4px #34d399;
+  }
+  50% {
+    opacity: 0.42;
+    box-shadow: 0 0 3px #34d399;
+  }
+}
+
+.active-proxy-lamp {
+  animation: activeProxyBlink 1.8s ease-in-out infinite;
+}
+
+/* Custom sleek dark scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(12, 8, 8, 0.55);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(224, 190, 120, 0.3);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(224, 190, 120, 0.55);
+}
+
+.leaflet-container {
+  background: #0d0a0a !important;
+  font-family: var(--font-ar), sans-serif !important;
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: #171211 !important;
+  color: #fbf4e6 !important;
+  border: 1px solid rgba(224, 190, 120, 0.38) !important;
+}
+
+.leaflet-control-zoom a {
+  background: #171211 !important;
+  color: #fae7be !important;
+  border-color: rgba(224, 190, 120, 0.25) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .active-proxy-lamp,
+  .tab-panel-enter {
+    animation: none !important;
+  }
+}

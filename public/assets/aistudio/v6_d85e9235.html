@@ -1,0 +1,2087 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#08090b">
+  <meta name="description" content="ONX PROXY ELITE - Premium private proxy experience">
+  <title>ONX PROXY — ELITE</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600;700;800&family=Oxanium:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      --bg: #08090b;
+      --panel: rgba(20, 21, 23, .76);
+      --panel-2: rgba(27, 27, 28, .78);
+      --gold: #d8b878;
+      --gold-2: #a9874c;
+      --gold-light: #f3dfb1;
+      --text: #f4efe4;
+      --muted: #918b7e;
+      --line: rgba(216,184,120,.17);
+      --green: #77d7a1;
+      --red: #e47c78;
+      --blue: #9db9d7;
+      --radius: 25px;
+      --shadow: 0 25px 80px rgba(0,0,0,.42);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 50% -15%, rgba(171,132,66,.17), transparent 42%),
+        radial-gradient(ellipse at 0% 55%, rgba(119,91,44,.075), transparent 35%),
+        radial-gradient(ellipse at 100% 80%, rgba(117,93,54,.06), transparent 35%),
+        #08090b;
+      font-family: "IBM Plex Sans Arabic", sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .13;
+      z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E");
+    }
+
+    button, a {
+      font: inherit;
+    }
+
+    button {
+      color: inherit;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .ambient {
+      position: fixed;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: .12;
+      pointer-events: none;
+      z-index: 0;
+      animation: floatGlow 12s ease-in-out infinite alternate;
+    }
+
+    .ambient.one {
+      top: 18%;
+      right: -180px;
+      background: #c49a50;
+    }
+
+    .ambient.two {
+      bottom: 5%;
+      left: -200px;
+      background: #98713a;
+      animation-delay: -5s;
+    }
+
+    @keyframes floatGlow {
+      from { transform: translateY(-20px) scale(.9); }
+      to { transform: translateY(35px) scale(1.15); }
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      width: min(100% - 30px, 480px);
+      margin: 0 auto;
+      padding: max(24px, env(safe-area-inset-top)) 0 35px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 27px;
+      animation: enter .7s ease both;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      width: 45px;
+      height: 45px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      color: var(--gold-light);
+      border: 1px solid rgba(216,184,120,.35);
+      background: linear-gradient(145deg, rgba(216,184,120,.18), rgba(216,184,120,.025));
+      box-shadow: 0 0 25px rgba(216,184,120,.08), inset 0 1px rgba(255,255,255,.08);
+    }
+
+    .brand-name {
+      font-family: "Oxanium", sans-serif;
+      letter-spacing: 2px;
+      font-size: 18px;
+      font-weight: 800;
+      direction: ltr;
+    }
+
+    .brand-sub {
+      color: var(--muted);
+      font-family: "Sora", sans-serif;
+      font-size: 8px;
+      letter-spacing: 2.5px;
+      margin-top: 3px;
+      direction: ltr;
+    }
+
+    .top-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      background: rgba(216,184,120,.055);
+      padding: 9px 12px;
+      border-radius: 30px;
+      color: var(--gold-light);
+      font-size: 10px;
+      letter-spacing: .8px;
+      font-family: "Sora", sans-serif;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 5px var(--green); }
+      50% { opacity: .45; box-shadow: 0 0 15px var(--green); }
+    }
+
+    .hero {
+      text-align: center;
+      margin: 25px 0 23px;
+      animation: enter .8s .08s ease both;
+    }
+
+    .hero-kicker {
+      color: var(--gold);
+      font-family: "Sora", sans-serif;
+      letter-spacing: 4px;
+      font-size: 9px;
+      direction: ltr;
+      margin-bottom: 11px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-family: "Alexandria", sans-serif;
+      font-size: clamp(27px, 8vw, 37px);
+      font-weight: 700;
+      letter-spacing: -.8px;
+      background: linear-gradient(110deg, #fff5db 10%, #d9bc80 55%, #9f7b42 100%);
+      color: transparent;
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+
+    .hero p {
+      margin: 9px 0 0;
+      color: #8f897c;
+      font-size: 12px;
+      font-weight: 300;
+    }
+
+    .premium-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 29px;
+      padding: 23px 20px 20px;
+      background:
+        linear-gradient(145deg, rgba(43,39,31,.82), rgba(19,20,21,.94) 45%, rgba(12,13,15,.97));
+      border: 1px solid rgba(216,184,120,.31);
+      box-shadow: var(--shadow), inset 0 1px rgba(255,255,255,.09);
+      animation: enter .85s .15s ease both;
+    }
+
+    .premium-card::before {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 180px;
+      top: -115px;
+      left: -50px;
+      background: rgba(222,183,112,.17);
+      filter: blur(70px);
+      pointer-events: none;
+    }
+
+    .premium-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background: linear-gradient(115deg, transparent 20%, rgba(255,255,255,.035) 48%, transparent 75%);
+    }
+
+    .card-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .service-type {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #c5b58f;
+      font-size: 10px;
+      letter-spacing: 1px;
+      font-family: "Sora", sans-serif;
+      direction: ltr;
+    }
+
+    .service-icon {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(216,184,120,.10);
+      border: 1px solid rgba(216,184,120,.23);
+      color: var(--gold);
+    }
+
+    .premium-label {
+      border: 1px solid rgba(216,184,120,.34);
+      background: rgba(216,184,120,.09);
+      color: var(--gold-light);
+      border-radius: 30px;
+      padding: 7px 11px;
+      font: 700 9px "Oxanium", sans-serif;
+      letter-spacing: 1.3px;
+      direction: ltr;
+    }
+
+    .proxy-title {
+      margin: 24px 0 5px;
+      font: 800 32px "Oxanium", sans-serif;
+      letter-spacing: 2px;
+      direction: ltr;
+      background: linear-gradient(100deg, #fff0ce, #c8a766 75%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .proxy-description {
+      color: #938b7c;
+      font-size: 11px;
+      direction: ltr;
+      font-family: "Sora", sans-serif;
+    }
+
+    .card-divider {
+      height: 1px;
+      margin: 21px 0;
+      background: linear-gradient(90deg, transparent, rgba(216,184,120,.28), transparent);
+    }
+
+    .connection-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .info-label {
+      color: #817a6e;
+      font-size: 10px;
+      margin-bottom: 8px;
+    }
+
+    .connection-value {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .connection-lamp {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #a18b61;
+      box-shadow: 0 0 10px rgba(216,184,120,.5);
+    }
+
+    .connection-lamp.online {
+      background: var(--green);
+      box-shadow: 0 0 12px var(--green);
+    }
+
+    .connection-lamp.offline {
+      background: var(--red);
+      box-shadow: 0 0 12px var(--red);
+    }
+
+    .server-location {
+      text-align: left;
+      direction: ltr;
+    }
+
+    .server-location strong {
+      font: 600 12px "Sora", sans-serif;
+      color: #e4d6b9;
+    }
+
+    .server-location small {
+      display: block;
+      margin-top: 5px;
+      color: #777164;
+      font-size: 9px;
+    }
+
+    .proxy-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-top: 19px;
+    }
+
+    .meta-item {
+      border: 1px solid rgba(255,255,255,.055);
+      background: rgba(255,255,255,.025);
+      border-radius: 13px;
+      padding: 11px 12px;
+    }
+
+    .meta-item span {
+      display: block;
+      color: #827b6e;
+      font-size: 9px;
+      margin-bottom: 6px;
+    }
+
+    .meta-item strong {
+      color: #d9c9a7;
+      font: 600 11px "Sora", sans-serif;
+      direction: ltr;
+    }
+
+    .connect-button {
+      position: relative;
+      width: 100%;
+      min-height: 58px;
+      margin-top: 19px;
+      border: 1px solid rgba(255,226,174,.6);
+      border-radius: 16px;
+      background: linear-gradient(110deg, #b28d4f, #e3c58b 48%, #a98244);
+      color: #17130c;
+      font-family: "Alexandria", sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(178,141,79,.18), inset 0 1px rgba(255,255,255,.5);
+      transition: transform .2s, filter .2s;
+    }
+
+    .connect-button:active {
+      transform: scale(.98);
+      filter: brightness(.9);
+    }
+
+    .connect-button .button-inner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .connect-button i {
+      width: 19px;
+      height: 19px;
+    }
+
+    .connect-hint {
+      color: #928775;
+      text-align: center;
+      font-size: 9px;
+      margin-top: 10px;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 27px 2px 13px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-family: "Alexandria", sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .section-heading span {
+      font: 9px "Sora", sans-serif;
+      color: var(--gold-2);
+      letter-spacing: 1px;
+      direction: ltr;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 11px;
+      animation: enter .9s .22s ease both;
+    }
+
+    .stat-card {
+      min-width: 0;
+      position: relative;
+      overflow: hidden;
+      padding: 16px 15px 14px;
+      border-radius: 19px;
+      border: 1px solid rgba(255,255,255,.075);
+      background: linear-gradient(145deg, rgba(29,30,31,.88), rgba(15,16,18,.88));
+      box-shadow: inset 0 1px rgba(255,255,255,.035);
+    }
+
+    .stat-card::after {
+      content: "";
+      position: absolute;
+      top: -45px;
+      left: -35px;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: rgba(216,184,120,.08);
+      filter: blur(25px);
+    }
+
+    .stat-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stat-icon {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      color: var(--gold);
+      background: rgba(216,184,120,.09);
+      border: 1px solid rgba(216,184,120,.15);
+    }
+
+    .stat-icon i {
+      width: 16px;
+      height: 16px;
+    }
+
+    .stat-tag {
+      color: #7c7569;
+      font: 9px "Sora", sans-serif;
+      letter-spacing: .6px;
+      direction: ltr;
+    }
+
+    .stat-number {
+      margin-top: 17px;
+      font: 700 27px "Oxanium", sans-serif;
+      letter-spacing: -.5px;
+      color: #f0e4cb;
+      direction: ltr;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .stat-unit {
+      color: #b69a63;
+      font: 10px "Sora", sans-serif;
+      margin-left: 3px;
+    }
+
+    .stat-caption {
+      color: #817b70;
+      font-size: 10px;
+      margin-top: 5px;
+    }
+
+    .chart-card {
+      border: 1px solid rgba(255,255,255,.075);
+      border-radius: 20px;
+      background: linear-gradient(145deg, rgba(27,28,29,.9), rgba(14,15,17,.9));
+      padding: 16px;
+      overflow: hidden;
+    }
+
+    .chart-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chart-head strong {
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .chart-head span {
+      color: #9d895f;
+      font: 9px "Sora", sans-serif;
+      direction: ltr;
+    }
+
+    .chart-wrap {
+      position: relative;
+      width: 100%;
+      height: 100px;
+      margin-top: 13px;
+    }
+
+    #speedChart {
+      width: 100%;
+      height: 100%;
+      display: block;
+      overflow: visible;
+    }
+
+    .chart-legend {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #8d8578;
+      font-size: 9px;
+      margin-top: 8px;
+    }
+
+    .legend-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 8px var(--gold);
+    }
+
+    .test-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      width: 100%;
+      min-height: 48px;
+      margin-top: 12px;
+      border: 1px solid rgba(216,184,120,.24);
+      border-radius: 14px;
+      color: #e4d0a8;
+      background: rgba(216,184,120,.07);
+      cursor: pointer;
+      font-size: 11px;
+      transition: background .2s;
+    }
+
+    .test-button:active {
+      background: rgba(216,184,120,.15);
+    }
+
+    .test-button:disabled {
+      opacity: .55;
+      cursor: wait;
+    }
+
+    .test-button i {
+      width: 16px;
+      height: 16px;
+    }
+
+    .test-progress {
+      height: 3px;
+      width: 100%;
+      margin-top: 13px;
+      border-radius: 5px;
+      background: rgba(255,255,255,.06);
+      overflow: hidden;
+      display: none;
+    }
+
+    .test-progress.active {
+      display: block;
+    }
+
+    .test-progress div {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, #9c783e, #f0d59e);
+      box-shadow: 0 0 12px rgba(216,184,120,.5);
+      transition: width .2s;
+    }
+
+    .network-note {
+      color: #777165;
+      font-size: 9px;
+      line-height: 1.8;
+      margin-top: 11px;
+    }
+
+    .account-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 13px;
+      padding: 16px;
+      border: 1px solid rgba(216,184,120,.17);
+      border-radius: 19px;
+      background: linear-gradient(115deg, rgba(33,31,27,.8), rgba(17,18,19,.9));
+      box-shadow: inset 0 1px rgba(255,255,255,.04);
+      transition: border .2s, transform .2s;
+    }
+
+    .account-card:active {
+      transform: scale(.99);
+      border-color: rgba(216,184,120,.4);
+    }
+
+    .account-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .account-avatar {
+      width: 45px;
+      height: 45px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      border: 1px solid rgba(216,184,120,.3);
+      background: linear-gradient(145deg, rgba(216,184,120,.19), rgba(216,184,120,.04));
+      color: var(--gold-light);
+      flex-shrink: 0;
+    }
+
+    .account-avatar i {
+      width: 21px;
+      height: 21px;
+    }
+
+    .account-name {
+      font: 700 14px "Sora", sans-serif;
+      direction: ltr;
+      text-align: left;
+      color: #e7d6b5;
+    }
+
+    .account-caption {
+      color: #81796c;
+      font-size: 9px;
+      margin-top: 5px;
+    }
+
+    .account-arrow {
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .account-arrow i {
+      width: 19px;
+      height: 19px;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 27px 0 5px;
+    }
+
+    .footer-logo {
+      font: 700 11px "Oxanium", sans-serif;
+      letter-spacing: 3px;
+      color: #a58b59;
+      direction: ltr;
+    }
+
+    .footer-copy {
+      margin-top: 7px;
+      color: #5e5a51;
+      font-size: 9px;
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 20;
+      bottom: max(22px, env(safe-area-inset-bottom));
+      left: 50%;
+      width: min(calc(100% - 32px), 420px);
+      transform: translate(-50%, 25px);
+      opacity: 0;
+      pointer-events: none;
+      padding: 13px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(216,184,120,.25);
+      background: rgba(24,24,23,.96);
+      color: #e8d8b8;
+      box-shadow: 0 15px 40px rgba(0,0,0,.45);
+      font-size: 11px;
+      text-align: center;
+      transition: .3s ease;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .spin {
+      animation: rotate 1s linear infinite;
+    }
+
+    @keyframes rotate {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes enter {
+      from { opacity: 0; transform: translateY(17px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .ltr {
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+
+    @media (max-width: 360px) {
+      .app { width: min(100% - 22px, 480px); }
+      .premium-card { padding: 19px 15px 16px; }
+      .proxy-title { font-size: 28px; }
+      .stat-number { font-size: 23px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    .proxy-fallback-button, .bot-open-button {
+      width: 100%; min-height: 48px; margin-top: 10px; border-radius: 15px;
+      border: 1px solid rgba(216,184,120,.28); background: rgba(216,184,120,.075);
+      color: #ead7ae; display: flex; align-items: center; justify-content: center;
+      gap: 10px; font-size: 12px; font-weight: 700; cursor: pointer;
+      transition: .25s ease;
+    }
+    .proxy-fallback-button:active, .bot-open-button:active { transform: scale(.985); }
+    .bot-panel { margin-top: 12px; padding: 15px; border: 1px solid var(--line);
+      border-radius: 18px; background: rgba(18,18,18,.62); }
+    .bot-panel-title { font-size: 12px; font-weight: 700; color: var(--gold-light); }
+    .bot-panel-note { margin-top: 5px; color: var(--muted); font-size: 10px; line-height: 1.8; }
+    .bot-modal { position: fixed; inset: 0; z-index: 50; display: none; align-items: center;
+      justify-content: center; padding: 22px; background: rgba(0,0,0,.72);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    .bot-modal.open { display: flex; }
+    .bot-modal-card { width: min(100%, 390px); padding: 22px; border-radius: 23px;
+      border: 1px solid rgba(216,184,120,.3); background: linear-gradient(145deg,#1c1b18,#0d0e10);
+      box-shadow: 0 25px 80px rgba(0,0,0,.6); }
+    .bot-modal-title { font-size: 16px; font-weight: 800; color: var(--gold-light); }
+    .bot-modal-desc { margin: 8px 0 16px; color: var(--muted); font-size: 11px; line-height: 1.9; }
+    .bot-input { width: 100%; height: 49px; padding: 0 14px; border-radius: 13px;
+      border: 1px solid rgba(216,184,120,.28); outline: none; background: #090a0b;
+      color: var(--text); font: 600 14px 'Sora',sans-serif; direction: ltr; text-align: left; }
+    .bot-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(216,184,120,.1); }
+    .bot-modal-actions { display: flex; gap: 9px; margin-top: 14px; }
+    .bot-modal-actions button { flex: 1; min-height: 45px; border-radius: 12px; border: 1px solid var(--line);
+      font-size: 11px; font-weight: 700; cursor: pointer; }
+    .bot-save { background: linear-gradient(135deg,#e6cc94,#a78348); color: #17130c; }
+    .bot-cancel { background: #171819; color: var(--text); }
+
+
+    .proxy-directory{margin:22px 0}.proxy-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.proxy-stat{padding:12px 6px;text-align:center;border:1px solid rgba(216,184,120,.18);border-radius:13px;background:#ffffff06}.proxy-stat b{display:block;color:#e7d3a9;font:700 19px Oxanium,sans-serif}.proxy-stat small{color:#918878;font-size:9px}.proxy-list{display:grid;gap:10px}.proxy-entry{padding:13px;border:1px solid #ffffff16;border-radius:15px;background:linear-gradient(145deg,#222321,#111213)}.proxy-entry.best{border-color:#77d7a166}.proxy-entry-top{display:flex;justify-content:space-between;gap:8px;align-items:center}.proxy-entry-name{color:#ead8b4;font-size:12px;font-weight:700}.proxy-entry-sub{color:#8c8578;font-size:9px;margin-top:4px;direction:ltr;text-align:right}.proxy-badge{font-size:9px;padding:5px 8px;border-radius:20px;color:#8de0b1;background:#77d7a116}.proxy-badge.down{color:#e99b96;background:#e47c7818}.proxy-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}.proxy-metrics div{background:#ffffff08;border-radius:9px;padding:8px}.proxy-metrics small{display:block;color:#81796d;font-size:8px}.proxy-metrics b{display:block;color:#dfcfad;font:600 11px Sora,sans-serif;margin-top:4px}.proxy-actions{display:flex;gap:8px;margin-top:10px}.proxy-actions button{flex:1;padding:10px;border-radius:10px;font-size:10px;font-weight:700}.proxy-go{background:linear-gradient(110deg,#b28d4f,#e3c58b);color:#17130c;border:0}.proxy-refresh{background:#d8b87812;border:1px solid #d8b87844;color:#e5d2a9}.proxy-error{padding:14px;text-align:center;color:#e99b96;border:1px dashed #e47c7855;border-radius:13px;font-size:10px;line-height:1.9}.proxy-toolbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:10px 0;color:#9b927f;font-size:9px}.proxy-more{width:100%;margin-top:10px;padding:12px;border:1px solid #d8b87844;border-radius:11px;color:#e5d2a9;background:#d8b87810}
+
+  
+/* ONX PRO VIP redesign */
+:root{--gold:#d9b875;--gold-2:#a9874c;--gold-light:#f3dfb1}
+.app{width:min(100% - 34px,1180px);padding-top:max(22px,env(safe-area-inset-top))}
+.topbar{position:sticky;top:8px;z-index:30;padding:12px 16px;border:1px solid var(--line);border-radius:22px;background:#090b0fd9;backdrop-filter:blur(22px);box-shadow:0 12px 45px #0008}
+.clockbox{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:105px;margin-inline:18px;color:#e9d6ad}
+.clockbox strong{font:700 18px Oxanium,sans-serif;letter-spacing:1px;direction:ltr}.clockbox small{font-size:9px;color:#89816f}
+.hero{margin:30px 0 25px}.hero h1{font-size:clamp(28px,4vw,45px)}
+.premium-card{max-width:850px;margin:0 auto 22px;padding:30px}.proxy-title{font-size:42px}
+.stats-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.proxy-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+.proxy-entry,.stat-card{transition:transform .25s,border-color .25s,box-shadow .25s}.proxy-entry:hover,.stat-card:hover{transform:translateY(-4px);border-color:#d8b87866;box-shadow:0 18px 45px #0006}
+.chart-wrap{height:145px}
+.vip-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;padding:9px;margin:18px 0 24px;border:1px solid var(--line);border-radius:20px;background:#101318d9;backdrop-filter:blur(18px);position:sticky;top:82px;z-index:25}
+.vip-tab{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:9px 8px;border:1px solid transparent;border-radius:13px;background:transparent;color:#9b9588;font-size:11px;cursor:pointer;transition:.25s}
+.vip-tab i{width:16px;height:16px}.vip-tab.active{color:#f2dfb8;background:linear-gradient(135deg,#d7b87525,#d7b87509);border-color:#d7b87555;box-shadow:inset 0 1px #ffffff12,0 5px 22px #0004}
+.vip-panel{display:none;animation:panelIn .35s ease both}.vip-panel.active{display:block}
+@keyframes panelIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+.panel-intro{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:5px 2px 17px}
+.panel-intro h2{margin:0;font:600 18px Alexandria,sans-serif}.panel-intro p{margin:5px 0 0;color:var(--muted);font-size:10px}
+.vip-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.vip-tile{padding:18px;border:1px solid var(--line);border-radius:19px;background:linear-gradient(145deg,#1c2026dd,#0d1015ee);box-shadow:inset 0 1px #ffffff0b,0 15px 40px #0003;min-width:0}
+.vip-tile-head{display:flex;align-items:center;gap:10px;color:#bfa36b;font-size:11px}.vip-tile-head i{width:18px;height:18px}
+.vip-tile strong.big{display:block;margin-top:13px;color:#f1e4c9;font:700 25px Oxanium,sans-serif;direction:ltr}
+.vip-tile p{color:#898477;font-size:10px;line-height:1.8;margin:8px 0 0}
+.vip-action{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:0 15px;border:1px solid #d8b87855;border-radius:12px;background:#d8b87813;color:#ead6aa;font-size:11px;cursor:pointer}
+.vip-action.primary{background:linear-gradient(110deg,#b28d4f,#e3c58b);color:#17130c;border:0;font-weight:800}
+.vip-input{width:100%;height:46px;margin:8px 0;padding:0 13px;border:1px solid #d8b87844;border-radius:12px;background:#090c11;color:#f3e7cd;outline:none;direction:ltr}
+.theme-swatches{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}
+.theme-swatch{width:43px;height:43px;border-radius:50%;border:2px solid #ffffff55;cursor:pointer;box-shadow:0 5px 20px #0008}
+.theme-swatch[aria-pressed=true]{outline:2px solid var(--gold);outline-offset:4px}
+.vip-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.storage-meter{height:8px;background:#ffffff12;border-radius:20px;overflow:hidden;margin:13px 0}.storage-meter span{display:block;height:100%;width:0;background:linear-gradient(90deg,#98713a,#f0d59e);border-radius:20px}
+.admin-state{padding:12px;border-radius:12px;background:#ffffff08;color:#aaa18e;font-size:10px;line-height:1.8;margin-top:12px}
+.admin-table{width:100%;border-collapse:collapse;font-size:10px;margin-top:12px}.admin-table th,.admin-table td{padding:10px 7px;border-bottom:1px solid #ffffff12;text-align:right}.admin-table th{color:#d8bd84}.admin-table td{color:#b9b2a4}
+/* ONX silver-gold command center */
+.admin-launch{width:43px;height:43px;display:grid;place-items:center;border:1px solid #d9c99d88;border-radius:14px;background:linear-gradient(145deg,#f5f1e6,#a9a9a5 45%,#8a6b35);color:#171717;box-shadow:0 0 24px #d8bd8430,inset 0 1px #fff;cursor:pointer;transition:.25s}
+.admin-launch:hover{transform:translateY(-2px) rotate(-4deg);box-shadow:0 0 32px #e4d4a866}.admin-launch svg{width:20px;height:20px}
+.admin-gate{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:18px;background:#030508d9;backdrop-filter:blur(18px)}.admin-gate.open{display:flex;animation:panelIn .25s ease}
+.admin-gate-card{width:min(100%,430px);padding:27px;border:1px solid #d7c18a66;border-radius:25px;background:linear-gradient(145deg,#22252a,#0b0e13 70%);box-shadow:0 35px 110px #000c,inset 0 1px #ffffff18;position:relative;overflow:hidden}
+.admin-gate-card:before{content:"";position:absolute;inset:-70% -20%;background:linear-gradient(110deg,transparent 40%,#e8d7ad12 50%,transparent 60%);transform:rotate(20deg);pointer-events:none}
+.admin-gate-emblem{width:66px;height:66px;margin:0 auto 15px;display:grid;place-items:center;border-radius:20px;background:linear-gradient(145deg,#f0e5c9,#aaa9a4 55%,#8c6c37);color:#171717;box-shadow:0 12px 35px #d9b87533}.admin-gate-emblem svg{width:30px;height:30px}
+.admin-gate-card h2{text-align:center;margin:0;color:#eee5d2;font:700 19px Alexandria,sans-serif}.admin-gate-card p{text-align:center;color:#99958c;font-size:11px;line-height:1.9;margin:9px 0 18px}
+.admin-gate-card .vip-input{text-align:center;font:600 16px Oxanium,sans-serif;letter-spacing:3px}.admin-gate-actions{display:flex;gap:9px}.admin-gate-actions>*{flex:1}
+.admin-console{display:none;margin:18px 0 35px;padding:clamp(14px,3vw,26px);border:1px solid #c9b78366;border-radius:25px;background:linear-gradient(145deg,#24272cdd,#0a0d12f5 65%);box-shadow:0 28px 90px #0009,inset 0 1px #fff1}.admin-console.open{display:block;animation:panelIn .35s ease}
+.admin-console-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}.admin-console-title{font:700 clamp(18px,3vw,25px) Alexandria,sans-serif;background:linear-gradient(90deg,#f6f0df,#b6b7b8,#d9b875);background-clip:text;color:transparent}.admin-console-sub{color:#8d8d8b;font-size:10px;margin-top:5px}
+.admin-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}.admin-kpi{padding:16px;border:1px solid #c4b17c38;border-radius:17px;background:linear-gradient(145deg,#ffffff0b,#ffffff02);box-shadow:inset 0 1px #fff1}.admin-kpi small{display:block;color:#aaa49a;font-size:10px}.admin-kpi strong{display:block;margin-top:9px;color:#e7d8b7;font:700 25px Oxanium,sans-serif;direction:ltr}
+.admin-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:17px 0}.admin-toolbar .vip-action{min-height:38px}.admin-section{margin-top:15px;padding:16px;border:1px solid #bda66d2b;border-radius:19px;background:#080b10a8}.admin-section-title{display:flex;align-items:center;gap:9px;color:#e1d0a9;font:600 13px Alexandria,sans-serif;margin-bottom:12px}.admin-section-title svg{width:17px;height:17px;color:#c8b078}
+.admin-proxy-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.admin-proxy{padding:14px;border:1px solid #ffffff17;border-radius:15px;background:linear-gradient(140deg,#ffffff0b,#ffffff02);cursor:pointer;transition:.2s}.admin-proxy:hover{border-color:#d7bd7a88;transform:translateY(-2px)}.admin-proxy-top{display:flex;justify-content:space-between;gap:8px}.admin-proxy-name{font-weight:700;color:#e9dfc9;font-size:12px;overflow-wrap:anywhere}.admin-proxy-state{font-size:9px;color:#91d9ae}.admin-proxy-state.down{color:#ed8882}.admin-proxy-meta{display:flex;gap:12px;flex-wrap:wrap;color:#99958d;font:10px Oxanium,sans-serif;direction:ltr;margin-top:10px}
+.admin-detail-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.admin-detail{padding:11px;border-radius:12px;background:#ffffff08;border:1px solid #ffffff10;min-width:0}.admin-detail small{display:block;color:#918c82;font-size:9px}.admin-detail b{display:block;margin-top:6px;color:#e5d8bd;font-size:11px;overflow-wrap:anywhere}
+#adminMap{height:310px;border:1px solid #bda66d55;border-radius:15px;overflow:hidden;background:#111}.admin-event{display:flex;align-items:center;gap:10px;padding:11px 2px;border-bottom:1px solid #ffffff10;color:#c6c0b5;font-size:10px}.admin-event:last-child{border:0}.admin-event i{color:#d5bd82}.admin-alert{position:fixed;z-index:1100;top:18px;left:50%;transform:translate(-50%,-20px);opacity:0;pointer-events:none;padding:13px 18px;border:1px solid #d8bd84aa;border-radius:15px;background:linear-gradient(120deg,#292a2a,#11151b);color:#f0dfb8;box-shadow:0 15px 50px #000a;transition:.35s;font-size:11px;max-width:90vw}.admin-alert.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:760px){.admin-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-proxy-grid{grid-template-columns:1fr}.admin-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#adminMap{height:260px}}
+@media(max-width:760px){.vip-tabs{grid-template-columns:repeat(3,minmax(0,1fr));top:76px}.vip-tab{font-size:10px;min-height:43px}.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.vip-grid{grid-template-columns:1fr 1fr}.proxy-list{grid-template-columns:1fr}.clockbox{margin-inline:8px;min-width:74px}.clockbox strong{font-size:15px}.topbar{padding:10px}.top-status{font-size:8px;padding:8px}.premium-card{padding:22px 17px}}
+@media(max-width:420px){.vip-grid{grid-template-columns:1fr}.brand-name{font-size:15px}.brand-sub{font-size:7px}.vip-tabs{gap:5px;padding:6px}.vip-tab{gap:5px;padding:7px 3px}.vip-tab i{width:14px;height:14px}}
+
+
+/* ===== ONX SIGNATURE EDITION · SILVER / CHAMPAGNE ===== */
+:root{
+ --bg:#080a0e;--panel:rgba(21,24,30,.82);--panel-2:rgba(31,34,40,.86);
+ --gold:#d8bd83;--gold-2:#9d855a;--gold-light:#f4e7c9;
+ --silver:#cbd0d5;--silver-dim:#87909a;--line:rgba(211,190,145,.19);
+ --text:#f2f0eb;--muted:#8c929b;--shadow:0 28px 90px rgba(0,0,0,.48)
+}
+html{background:#080a0e}
+body{background:radial-gradient(ellipse at 50% -12%,rgba(198,173,119,.18),transparent 38%),radial-gradient(ellipse at 100% 38%,rgba(112,126,145,.10),transparent 30%),radial-gradient(ellipse at 0% 78%,rgba(124,99,55,.10),transparent 34%),#080a0e;font-family:"Alexandria","IBM Plex Sans Arabic",sans-serif}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.22;background:linear-gradient(120deg,transparent 0 47%,rgba(255,255,255,.018) 48%,transparent 50% 100%);background-size:9px 9px}
+.app{width:min(100% - 34px,1240px);padding-bottom:55px}
+.topbar{position:sticky;top:9px;z-index:40;display:grid;grid-template-columns:1fr auto auto auto;gap:18px;padding:13px 18px;border:1px solid rgba(215,194,151,.24);border-radius:23px;background:linear-gradient(115deg,rgba(27,30,35,.94),rgba(10,13,18,.92));backdrop-filter:blur(24px);box-shadow:0 18px 55px #0008,inset 0 1px rgba(255,255,255,.09)}
+.brand-mark{width:49px;height:49px;border-radius:16px;background:linear-gradient(145deg,#e7dfcf,#9ea4aa 47%,#806b48);color:#17191d;border:1px solid #fff8;box-shadow:0 8px 25px #0007,inset 0 1px #fff}
+.brand-name{font-size:20px;letter-spacing:2.8px;background:linear-gradient(100deg,#f6f2e8,#c9cdd1 55%,#d6bc83);background-clip:text;-webkit-background-clip:text;color:transparent}
+.brand-sub{color:#9c9b96;letter-spacing:3px}
+.clockbox{min-width:126px;margin:0;align-self:center;padding:6px 13px;border:1px solid #d7c39825;border-radius:14px;background:#ffffff05}
+.clockbox strong{font-size:20px;color:#e8d8b6}.clockbox small{color:#96918a}
+.admin-launch{width:48px;height:48px;border-radius:16px;background:linear-gradient(145deg,#f4f0e7 0%,#c2c6ca 42%,#9d8454 100%);box-shadow:0 8px 25px #0008,inset 0 1px #fff;border:1px solid #fff9}
+.top-status{align-self:center;white-space:nowrap;background:#ffffff06;border-color:#ffffff16;color:#d6c7a6}
+.hero{margin:42px 0 29px}.hero-kicker{color:#b49b6c;letter-spacing:5px;font-size:10px}.hero h1{font-size:clamp(31px,5vw,53px);background:linear-gradient(100deg,#fff8e9 8%,#cbd0d5 42%,#d6bc83 74%,#8c754d);background-clip:text;-webkit-background-clip:text}.hero p{color:#9a9da2;font-size:12px}
+.premium-card{max-width:100%;margin:0 auto 20px;padding:clamp(23px,4vw,39px);border-radius:31px;border:1px solid rgba(218,194,145,.33);background:linear-gradient(135deg,rgba(45,47,49,.92),rgba(18,21,26,.97) 47%,rgba(10,13,18,.98));box-shadow:0 30px 90px #0008,inset 0 1px rgba(255,255,255,.13),inset 0 -1px rgba(214,190,142,.09)}
+.premium-card:before{width:420px;height:260px;top:-160px;left:18%;background:#c5a66b26;filter:blur(95px)}
+.proxy-title{font-size:clamp(34px,5vw,54px);letter-spacing:4px}.proxy-description{letter-spacing:2px;color:#a3a7ad}.service-icon{background:linear-gradient(145deg,#ded7c7,#8d9298 60%,#79613c);color:#16191d;border:1px solid #fff8}.premium-label{background:linear-gradient(110deg,#e4d5b3,#a7abb0 55%,#8d7446);color:#15171a;border:1px solid #fff7}
+.connection-lamp{width:9px;height:9px}.meta-item{background:linear-gradient(145deg,#ffffff0b,#ffffff02);border-color:#d7c39820}.meta-item strong{color:#e7dfce}.connect-button{background:linear-gradient(110deg,#9f8049,#e8d6aa 46%,#a68a57);border:1px solid #f3e5c4;color:#17191d;box-shadow:0 12px 30px #9f804927,inset 0 1px #fff}.proxy-fallback-button{border-color:#d6c08b4d;background:linear-gradient(120deg,#ffffff0b,#d8bd8308);color:#d9c8a5}
+.vip-tabs{position:sticky;top:88px;z-index:35;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:23px 0;padding:9px;border-radius:21px;border:1px solid #d8c18c2b;background:linear-gradient(120deg,#1b1f25ed,#0d1117ed);box-shadow:0 15px 45px #0007;backdrop-filter:blur(22px)}
+.vip-tab{min-height:51px;border-radius:14px;font-size:11px;color:#a3a6aa}.vip-tab.active{color:#f1e2c2;border-color:#d7bd7a66;background:linear-gradient(135deg,#d7b87524,#cbd0d508);box-shadow:inset 0 1px #fff1,0 8px 22px #0005}.vip-tab:hover{color:#f0e4cb;border-color:#ffffff20}
+.panel-intro{margin:7px 2px 20px}.panel-intro h2{font-size:19px;color:#eee7d9}.panel-intro p{color:#92969d}
+.stats-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.stat-card{border-radius:21px;padding:19px;background:linear-gradient(145deg,#22262c,#11151b);border-color:#d7c39821;box-shadow:inset 0 1px #ffffff0b,0 14px 38px #0004}.stat-icon{background:linear-gradient(145deg,#e2d9c8,#9ba0a6 58%,#92784a);color:#191b1e;border:1px solid #fff8}.stat-number{color:#f0e6d3;font-size:30px}.stat-tag{color:#a59a83}
+.chart-card,.vip-tile{border-radius:22px;background:linear-gradient(145deg,#20252c,#0f1319);border:1px solid #d7c39822;box-shadow:inset 0 1px #ffffff0b,0 15px 38px #0004}.chart-wrap{height:170px}.vip-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.vip-tile{padding:21px}.vip-tile-head{color:#d7c08e}.vip-tile p{color:#999da3}.vip-tile strong.big{color:#f0e6d3}
+.proxy-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.proxy-entry{border-radius:19px;padding:17px;background:linear-gradient(145deg,#22272e,#11151b);border-color:#d7c39820;box-shadow:inset 0 1px #ffffff0a,0 10px 30px #0003}.proxy-entry.best{border-color:#d5bc7c88}.proxy-entry-name{color:#eee2c8}.proxy-badge{font-weight:700}.proxy-metrics div{background:#ffffff09;border:1px solid #ffffff08}.proxy-go{background:linear-gradient(110deg,#a98950,#ead8ae);color:#15171a;border-radius:11px}.proxy-more{border-radius:13px;color:#e6d3a9;background:#d8bd8310}
+.vip-action{border-color:#d7bd7a55;background:linear-gradient(130deg,#d7bd7a15,#ffffff05);color:#e8d7b3}.vip-action.primary{background:linear-gradient(110deg,#a98950,#e8d6aa);color:#15171a}
+.account-card{background:linear-gradient(120deg,#252a31,#10151c);border-color:#d7c3982c;border-radius:21px;padding:19px}.account-avatar{background:linear-gradient(145deg,#e6dfd0,#a2a7ac 60%,#8d7548);color:#17191c;border-color:#fff8}.account-name{color:#eee2c8}.footer{border-top:1px solid #d8bd831c;margin-top:38px}.footer-logo{color:#c7ad78}
+.admin-console{margin:25px 0 35px;padding:clamp(16px,3vw,30px);border-radius:28px;border:1px solid #d8c18c55;background:linear-gradient(145deg,#252a31f2,#0b0f15f7 70%);box-shadow:0 35px 100px #000b,inset 0 1px #ffffff15}
+.admin-console-head{padding-bottom:17px;border-bottom:1px solid #d7c39822}.admin-console-title{font-size:clamp(20px,3vw,29px)}.admin-kpis{gap:13px}.admin-kpi{border-radius:19px;padding:19px;background:linear-gradient(145deg,#ffffff0d,#ffffff02);border-color:#d8bd8333}.admin-kpi small{color:#b2b1ad}.admin-kpi strong{font-size:30px;color:#e9d8b4}
+.admin-section{padding:19px;border-radius:21px;border-color:#d8bd8328;background:linear-gradient(145deg,#ffffff08,#00000010)}.admin-section-title{font-size:14px;color:#e6d6b6}.admin-proxy{border-radius:17px;background:linear-gradient(145deg,#272c33,#11161d);border-color:#ffffff16;padding:16px}.admin-proxy-name{font-size:13px}.admin-detail{border-radius:14px;background:linear-gradient(145deg,#ffffff0b,#ffffff03);border-color:#ffffff12;padding:13px}.admin-detail b{font-size:12px;color:#eadfc9}
+.admin-gate-card{border-radius:29px;background:linear-gradient(145deg,#30343a,#11151b 68%);border-color:#e1cb9a77;box-shadow:0 40px 120px #000e,inset 0 1px #fff2}.admin-gate-emblem{background:linear-gradient(145deg,#f5efdf,#b8bdc2 55%,#92784a);box-shadow:0 15px 40px #d8bd8333}.admin-gate-card h2{font-family:Alexandria,sans-serif}.admin-gate-card .vip-input{height:54px;border-radius:15px;background:#080b10;border-color:#d8bd8355;color:#f4e7c9}
+.admin-alert{background:linear-gradient(120deg,#30343a,#11161d);border-color:#d8bd83aa;color:#f4e7c9}
+#adminMap{height:360px;border-radius:18px;border:1px solid #d8bd8355;filter:saturate(.75) contrast(1.03)}
+.leaflet-container{font-family:"IBM Plex Sans Arabic",sans-serif;background:#111820}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#171d25;color:#eee2c8;border:1px solid #d8bd8355}.leaflet-control-zoom a{background:#171d25!important;color:#e9d8b4!important;border-color:#ffffff20!important}
+@media(max-width:900px){.app{width:min(100% - 28px,760px)}.topbar{grid-template-columns:1fr auto auto;gap:10px}.top-status{grid-column:1/-1;justify-content:center}.vip-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.app{width:calc(100% - 22px)}.topbar{top:5px;padding:10px;border-radius:18px;grid-template-columns:1fr auto auto}.brand-mark{width:42px;height:42px}.brand-name{font-size:16px}.brand-sub{font-size:7px}.clockbox{min-width:78px;padding:5px 7px}.clockbox strong{font-size:15px}.clockbox small{font-size:8px}.admin-launch{width:41px;height:41px}.top-status{font-size:8px;padding:7px}.vip-tabs{top:78px;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;padding:6px}.vip-tab{min-height:43px;font-size:9px;gap:5px}.vip-tab:nth-child(4),.vip-tab:nth-child(5){grid-column:auto}.hero{margin:29px 0 20px}.premium-card{padding:21px 16px;border-radius:24px}.proxy-title{font-size:34px}.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.stat-card{padding:14px}.stat-number{font-size:24px}.proxy-list{grid-template-columns:1fr}.vip-grid{grid-template-columns:1fr}.admin-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-proxy-grid{grid-template-columns:1fr}.admin-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#adminMap{height:270px}.admin-console-head{align-items:flex-start}.admin-console-head .vip-row{width:100%}.admin-console-head .vip-action{flex:1;padding:0 9px;font-size:10px}}
+@media(max-width:380px){.brand-sub{letter-spacing:1.5px}.top-status{display:none}.topbar{grid-template-columns:1fr auto auto}.vip-tab{font-size:8px}.proxy-title{font-size:29px}.admin-detail-grid{grid-template-columns:1fr}}
+
+</style>
+</head>
+
+<body>
+  <div class="ambient one"></div>
+  <div class="ambient two"></div>
+
+  <main class="app">
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">
+          <i data-lucide="shield-check"></i>
+        </div>
+        <div>
+          <div class="brand-name">ONX PROXY</div>
+          <div class="brand-sub">PRIVATE NETWORK</div>
+        </div>
+      </div>
+
+      <div class="clockbox"><strong id="vipClock">--:--:--</strong><small id="vipDate">--</small></div>
+      <button class="admin-launch" id="adminLaunch" type="button" aria-label="لوحة تحكم المسؤول" title="لوحة تحكم المسؤول"><i data-lucide="shield-check"></i></button>
+      <div class="top-status">
+        <span class="live-dot" id="internetLamp"></span>
+        <span id="internetStatus">CHECKING NETWORK</span>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-kicker">THE PRIVATE ACCESS EXPERIENCE</div>
+      <h1>اتصال بمستوى مختلف</h1>
+      <p>تجربة اتصال أنيقة، بسيطة، ومصممة بعناية</p>
+    </section>
+
+    <!-- PREMIUM PROXY CARD -->
+    <section class="premium-card">
+      <div class="card-content">
+
+        <div class="card-head">
+          <div class="service-type">
+            <div class="service-icon">
+              <i data-lucide="radio-tower"></i>
+            </div>
+            <span>MTProto · PRIVATE PROXY</span>
+          </div>
+          <div class="premium-label">ELITE ACCESS</div>
+        </div>
+
+        <div class="proxy-title">ONX PROXY</div>
+        <div class="proxy-description">SECURE TELEGRAM GATEWAY</div>
+
+        <div class="card-divider"></div>
+
+        <div class="connection-row">
+          <div>
+            <div class="info-label">حالة فحص الخادم</div>
+            <div class="connection-value">
+              <span class="connection-lamp" id="proxyLamp"></span>
+              <span id="proxyStatus">بانتظار الفحص</span>
+            </div>
+          </div>
+
+          <div class="server-location">
+            <div class="info-label">SERVER LOCATION</div>
+            <strong id="serverCountry">جارٍ التحديد...</strong>
+            <small id="serverCity">IP LOCATION</small>
+          </div>
+        </div>
+
+        <div class="proxy-meta">
+          <div class="meta-item">
+            <span>PROXY TYPE</span>
+            <strong>MTProto</strong>
+          </div>
+          <div class="meta-item">
+            <span>SERVER PORT</span>
+            <strong>443</strong>
+          </div>
+        </div>
+
+        <button class="connect-button" id="connectButton">
+          <span class="button-inner">
+            <i data-lucide="zap"></i>
+            <span>تفعيل بروكسي تيليجرام</span>
+          </span>
+        </button>
+
+        <div class="connect-hint" id="connectHint">
+          اضغط تفعيل لإرسال إعداد البروكسي إلى تطبيق تيليجرام المثبّت
+        </div>
+
+        <button class="proxy-fallback-button" id="proxyWebButton" type="button">
+          <i data-lucide="external-link"></i>
+          <span>فتح رابط البروكسي واختيار تطبيق تيليجرام</span>
+        </button>
+
+        <div class="bot-panel">
+          <div class="bot-panel-title">تشغيل البوت عبر نفس البروكسي</div>
+          <div class="bot-panel-note" id="botStatusText">أضف معرف البوت مرة واحدة. بعد تفعيل البروكسي في تطبيق تيليجرام، افتح البوت من هنا وسيستخدم التطبيق نفس إعداد البروكسي.</div>
+          <button class="bot-open-button" id="botOpenButton" type="button">
+            <i data-lucide="bot"></i>
+            <span id="botButtonLabel">إعداد وفتح البوت</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+
+    <div class="section-heading"><h2>قائمة بروكسيات تيليجرام</h2><span>LIVE PROXY NETWORK</span></div>
+    <section class="proxy-directory">
+      <div class="proxy-stats"><div class="proxy-stat"><b id="pxOnline">--</b><small>فعّالة</small></div><div class="proxy-stat"><b id="pxDead">--</b><small>متوقفة</small></div><div class="proxy-stat"><b id="pxTotal">--</b><small>الإجمالي</small></div></div>
+      <div class="proxy-toolbar"><span id="pxUpdated">جارٍ الاتصال بخدمة البروكسيات...</span><button class="proxy-refresh" id="pxRefresh">تحديث</button></div>
+      <div class="proxy-list" id="pxList"><div class="proxy-error">جارٍ جلب البروكسيات...</div></div>
+      <button class="proxy-more" id="pxMore" hidden>تحميل المزيد</button>
+      <p class="feed-note">يعرض Ping زمن الاستجابة المعلن من الخدمة وليس سرعة التنزيل. حالة Telegram الفعلية لا يمكن تأكيدها من صفحة الويب بعد فتح رابط tg://proxy.</p>
+    </section>
+
+    <!-- INTERNET PERFORMANCE -->
+    <div class="section-heading">
+      <h2>أداء اتصال الإنترنت</h2>
+      <span>NETWORK ANALYTICS</span>
+    </div>
+
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-top">
+          <div class="stat-icon"><i data-lucide="download"></i></div>
+          <div class="stat-tag">DOWNLOAD</div>
+        </div>
+        <div class="stat-number">
+          <span id="downloadValue">--.--</span>
+          <span class="stat-unit">Mbps</span>
+        </div>
+        <div class="stat-caption">سرعة التنزيل المقدّرة</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-top">
+          <div class="stat-icon"><i data-lucide="activity"></i></div>
+          <div class="stat-tag">PING</div>
+        </div>
+        <div class="stat-number">
+          <span id="pingValue">---</span>
+          <span class="stat-unit">ms</span>
+        </div>
+        <div class="stat-caption">زمن استجابة الشبكة</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-top">
+          <div class="stat-icon"><i data-lucide="upload"></i></div>
+          <div class="stat-tag">UPLOAD</div>
+        </div>
+        <div class="stat-number">
+          <span id="uploadValue">--.--</span>
+          <span class="stat-unit">Mbps</span>
+        </div>
+        <div class="stat-caption">سرعة الإرسال التقديرية</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-top">
+          <div class="stat-icon"><i data-lucide="signal"></i></div>
+          <div class="stat-tag">NETWORK</div>
+        </div>
+        <div class="stat-number" style="font-size:20px">
+          <span id="networkType">--</span>
+        </div>
+        <div class="stat-caption">نوع الشبكة المعلن للجهاز</div>
+      </div>
+    </section>
+
+    <!-- SPEED CHART -->
+    <div class="section-heading">
+      <h2>مخطط أداء الشبكة</h2>
+      <span>LIVE PERFORMANCE</span>
+    </div>
+
+    <section class="chart-card">
+      <div class="chart-head">
+        <strong>سرعة التنزيل</strong>
+        <span>Mbps / HISTORY</span>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="speedChart"></canvas>
+      </div>
+
+      <div class="chart-legend">
+        <span class="legend-dot"></span>
+        <span>نتائج اختبارات السرعة السابقة</span>
+      </div>
+
+      <div class="test-progress" id="progressTrack">
+        <div id="progressBar"></div>
+      </div>
+
+      <button class="test-button" id="testButton">
+        <i data-lucide="refresh-cw"></i>
+        <span>اختبار سرعة الإنترنت الآن</span>
+      </button>
+
+      <div class="network-note" id="testNote">
+        يتم قياس سرعة اتصال جهازك بالإنترنت، وليس سرعة بروكسي تيليجرام.
+        قد تختلف النتيجة حسب الشبكة والخادم وبعده الجغرافي.
+      </div>
+    </section>
+
+    <!-- TELEGRAM ACCOUNT CARD -->
+    <div class="section-heading">
+      <h2>الحساب الرسمي</h2>
+      <span>OFFICIAL CHANNEL</span>
+    </div>
+
+    <a class="account-card" href="tg://resolve?domain=ONX44" rel="noopener">
+      <div class="account-info">
+        <div class="account-avatar">
+          <i data-lucide="send"></i>
+        </div>
+        <div>
+          <div class="account-name">DEV-PROXY-TLEGRAM</div><div class="account-caption ltr">@ONX44 · الحساب الرسمي</div>
+          <div class="account-caption">الحساب الرسمي على تيليجرام</div>
+        </div>
+      </div>
+      <div class="account-arrow">
+        <i data-lucide="arrow-up-left"></i>
+      </div>
+    </a>
+
+    <nav class="vip-tabs" aria-label="التنقل الرئيسي">
+      <button class="vip-tab active" data-tab="home"><i data-lucide="layout-dashboard"></i>الرئيسية</button>
+      <button class="vip-tab" data-tab="proxies"><i data-lucide="radio-tower"></i>البروكسيات</button>
+      <button class="vip-tab" data-tab="performance"><i data-lucide="activity"></i>الأداء</button>
+      <button class="vip-tab" data-tab="usage"><i data-lucide="database"></i>التخزين</button>
+      <button class="vip-tab" data-tab="themes"><i data-lucide="palette"></i>المظهر</button>
+    </nav>
+    <div class="vip-panel" id="panel-usage">
+      <div class="panel-intro"><div><h2>التخزين والاستخدام</h2><p>معلومات محلية من هذا المتصفح فقط</p></div><i data-lucide="database"></i></div>
+      <div class="vip-grid">
+        <article class="vip-tile"><div class="vip-tile-head"><i data-lucide="eye"></i> زيارات هذا الجهاز</div><strong class="big" id="localVisits">1</strong><p>ليست إحصائية عالمية ولا عدد مستخدمي البروكسي.</p></article>
+        <article class="vip-tile"><div class="vip-tile-head"><i data-lucide="hard-drive"></i> التخزين المحلي</div><strong class="big" id="localStorageSize">0 KB</strong><div class="storage-meter"><span id="storageBar"></span></div><p>حجم البيانات المحفوظة محلياً في هذا المتصفح.</p></article>
+        <article class="vip-tile"><div class="vip-tile-head"><i data-lucide="cloud"></i> قاعدة البيانات</div><strong class="big">غير مربوطة</strong><p>لا يوجد حالياً مصدر تخزين مشترك في هذا الملف.</p></article>
+      </div>
+      <div class="admin-state">فتح رابط MTProto لا يرسل للموقع هوية المستخدم أو حدث اتصال. الإحصاء الحقيقي يحتاج تسجيل دخول/ربط هوية وخادماً يسجل الأحداث.</div>
+    </div>
+    <div class="vip-panel" id="panel-themes">
+      <div class="panel-intro"><div><h2>مركز التخصيص</h2><p>ألوان وخلفيات محفوظة على جهازك</p></div><i data-lucide="sliders-horizontal"></i></div>
+      <article class="vip-tile"><div class="vip-tile-head"><i data-lucide="palette"></i> ألوان الواجهة</div>
+        <div class="theme-swatches">
+          <button class="theme-swatch" data-theme="gold" aria-label="ذهبي" style="background:linear-gradient(135deg,#d9b875,#6e4c20)" aria-pressed="true"></button>
+          <button class="theme-swatch" data-theme="blue" aria-label="أزرق" style="background:linear-gradient(135deg,#8bb9e8,#234d83)" aria-pressed="false"></button>
+          <button class="theme-swatch" data-theme="violet" aria-label="بنفسجي" style="background:linear-gradient(135deg,#b5a0ed,#57408e)" aria-pressed="false"></button>
+          <button class="theme-swatch" data-theme="emerald" aria-label="زمردي" style="background:linear-gradient(135deg,#7ed7b0,#236b4b)" aria-pressed="false"></button>
+        </div>
+        <div class="vip-tile-head"><i data-lucide="image"></i> الخلفيات</div><div class="vip-row" style="margin-top:12px">
+          <button class="vip-action" data-bg="default">داكن فاخر</button><button class="vip-action" data-bg="midnight">Midnight</button><button class="vip-action" data-bg="carbon">Carbon</button><button class="vip-action" data-bg="aurora">Aurora</button>
+        </div>
+      </article>
+    </div>
+    <section class="admin-console" id="adminConsole" aria-label="لوحة تحكم المسؤول">
+      <div class="admin-console-head"><div><div class="admin-console-title">ONX · COMMAND CENTER</div><div class="admin-console-sub">SILVER & GOLD PROXY INTELLIGENCE · LIVE DATA</div></div><div class="vip-row"><button class="vip-action" id="adminRefresh"><i data-lucide="refresh-cw"></i> تحديث</button><button class="vip-action" id="adminExport"><i data-lucide="file-down"></i> تنزيل TXT</button><button class="vip-action" id="adminClose"><i data-lucide="x"></i> إغلاق</button></div></div>
+      <div class="admin-kpis"><article class="admin-kpi"><small>كل البروكسيات</small><strong id="adProxyTotal">—</strong></article><article class="admin-kpi"><small>البروكسيات العاملة</small><strong id="adProxyUp">—</strong></article><article class="admin-kpi"><small>البروكسيات المتوقفة</small><strong id="adProxyDown">—</strong></article><article class="admin-kpi"><small>مستخدمون مسجلون</small><strong id="adUsers">—</strong></article></div>
+      <div class="admin-toolbar"><button class="vip-action primary" data-proxy-filter="all">الكل</button><button class="vip-action" data-proxy-filter="active">العاملة</button><button class="vip-action" data-proxy-filter="inactive">المتوقفة</button><span class="admin-console-sub" id="adUpdated">بانتظار اتصال الخادم</span></div>
+      <section class="admin-section"><div class="admin-section-title"><i data-lucide="server"></i> فهرس البروكسيات · اختر بروكسياً لعرض تفاصيله</div><div class="admin-proxy-grid" id="adProxyList"><div class="admin-state">يتم تحميل البيانات من الخادم بعد تسجيل الدخول.</div></div></section>
+      <section class="admin-section"><div class="admin-section-title"><i data-lucide="scan-eye"></i> ملف البروكسي المحدد</div><div id="adProxyDetail" class="admin-state">اختر بروكسياً من القائمة لعرض بياناته المتاحة.</div></section>
+      <section class="admin-section"><div class="admin-section-title"><i data-lucide="map-pinned"></i> الخريطة الجغرافية للبروكسيات</div><div id="adminMap"></div><div class="admin-state">تظهر العلامات عندما يرسل مصدر البيانات إحداثيات صحيحة (latitude / longitude). لا يتم تخمين مواقع الخوادم.</div></section>
+      <section class="admin-section"><div class="admin-section-title"><i data-lucide="users"></i> المستخدمون والاتصالات الجديدة</div><div class="admin-detail-grid"><div class="admin-detail"><small>إجمالي المستخدمين</small><b id="adUserTotal">—</b></div><div class="admin-detail"><small>الجدد مؤخراً</small><b id="adNewUsers">—</b></div><div class="admin-detail"><small>إجمالي أحداث الاتصال</small><b id="adConnections">—</b></div></div><div id="adEvents" class="admin-state">لا توجد أحداث بعد.</div></section>
+      <div class="admin-state">الحسابات الفعلية لكل بروكسي، المستخدم الجديد، وملف JSON على GitHub تتطلب أن يسجل الخادم أحداث اتصال حقيقية. فتح tg://proxy وحده لا يكشف للموقع من اتصل ولا يتيح حظر مستخدم MTProto.</div>
+    </section>
+    <footer class="footer">
+      <div class="footer-logo">ONX PROXY · ELITE</div>
+      <div class="footer-copy">PRIVATE ACCESS EXPERIENCE · 2026</div>
+    </footer>
+
+  </main>
+
+
+  <div class="bot-modal" id="botModal" role="dialog" aria-modal="true" aria-labelledby="botModalTitle">
+    <div class="bot-modal-card">
+      <div class="bot-modal-title" id="botModalTitle">معرّف بوت تيليجرام</div>
+      <div class="bot-modal-desc">اكتب اسم المستخدم الخاص بالبوت فقط، مع أو بدون @. سيُحفظ على هذا الجهاز حتى تفتحه لاحقاً بضغطة واحدة.</div>
+      <input class="bot-input" id="botUsernameInput" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="my_bot">
+      <div class="bot-modal-actions">
+        <button class="bot-cancel" id="botCancelButton" type="button">إلغاء</button>
+        <button class="bot-save" id="botSaveButton" type="button">حفظ وفتح البوت</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-gate" id="adminGate" role="dialog" aria-modal="true" aria-labelledby="adminGateTitle"><div class="admin-gate-card"><div class="admin-gate-emblem"><i data-lucide="shield-check"></i></div><h2 id="adminGateTitle">دخول الإدارة المحمي</h2><p>أدخل كلمة مرور المسؤول للتحقق من الخادم وفتح مركز التحكم</p><input class="vip-input" id="adminPassword" type="password" autocomplete="current-password" placeholder="PASSWORD"><div class="admin-gate-actions"><button class="vip-action" id="adminGateCancel">إلغاء</button><button class="vip-action primary" id="adminLoginButton">تحقق وفتح اللوحة</button></div><div class="admin-state" id="adminMessage">يتم التحقق من كلمة المرور على الخادم فقط.</div></div></div>
+  <div class="admin-alert" id="adminAlert"></div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    "use strict";
+
+    /* ==========================================
+       ONX PROXY CONFIGURATION
+       ========================================== */
+
+    const CONFIG = Object.freeze({
+      proxyURL:
+        "tg://proxy?server=utkapay.life&port=443&secret=eec0ab2dc91cd75da14bf8bde752ca8222766473696e612e7275",
+
+      proxyWebURL:
+        "https://t.me/proxy?server=utkapay.life&port=443&secret=eec0ab2dc91cd75da14bf8bde752ca8222766473696e612e7275",
+
+      proxyApiBase: "https://prox.geg736yebj.workers.dev",
+      proxyRefreshMs: 45000,
+      proxyPageSize: 20,
+      botStorageKey: "onx_proxy_bot_username",
+
+      telegramAccount: "https://t.me/ONX44",
+
+      speedTestURL: "https://speed.cloudflare.com/__down",
+
+      uploadTestURL: "https://speed.cloudflare.com/__up",
+
+      locationDNS: "https://dns.google/resolve",
+
+      locationAPI: "https://ipwho.is",
+
+      downloadBytes: 2000000,
+
+      uploadBytes: 262144,
+
+      pingAttempts: 3
+    });
+
+    const $ = id => document.getElementById(id);
+
+    let speedHistory = [];
+    let testRunning = false;
+    let toastTimer = null;
+
+    /* ==========================================
+       UI HELPERS
+       ========================================== */
+
+    function showToast(message) {
+      const toast = $("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+
+      clearTimeout(toastTimer);
+
+      toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3400);
+    }
+
+    function setProxyStatus(state, message) {
+      const lamp = $("proxyLamp");
+      const status = $("proxyStatus");
+
+      lamp.classList.remove("online", "offline");
+
+      if (state === "online") {
+        lamp.classList.add("online");
+      } else if (state === "offline") {
+        lamp.classList.add("offline");
+      }
+
+      status.textContent = message;
+    }
+
+    function setInternetStatus(online, message) {
+      const lamp = $("internetLamp");
+
+      lamp.style.background = online ? "#77d7a1" : "#e47c78";
+      lamp.style.boxShadow = online
+        ? "0 0 10px #77d7a1"
+        : "0 0 10px #e47c78";
+
+      $("internetStatus").textContent = message;
+    }
+
+    function formatMbps(value) {
+      if (!Number.isFinite(value) || value < 0) return "--.--";
+      return value.toFixed(2);
+    }
+
+    function setProgress(value) {
+      $("progressBar").style.width =
+        Math.max(0, Math.min(100, value)) + "%";
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    /* ==========================================
+       NETWORK TYPE
+       ========================================== */
+
+    function readNetworkType() {
+      const connection =
+        navigator.connection ||
+        navigator.mozConnection ||
+        navigator.webkitConnection;
+
+      if (!connection) {
+        $("networkType").textContent = "AUTO";
+        return;
+      }
+
+      const type = connection.effectiveType || connection.type || "AUTO";
+
+      const names = {
+        "slow-2g": "2G",
+        "2g": "2G",
+        "3g": "3G",
+        "4g": "4G",
+        "5g": "5G",
+        "wifi": "Wi-Fi",
+        "ethernet": "LAN"
+      };
+
+      $("networkType").textContent =
+        names[type.toLowerCase()] || type.toUpperCase();
+
+      connection.addEventListener?.("change", () => {
+        const updated = connection.effectiveType || connection.type || "AUTO";
+        $("networkType").textContent =
+          names[updated.toLowerCase()] || updated.toUpperCase();
+      });
+    }
+
+    /* ==========================================
+       PING TEST
+       Measures response time to the test endpoint.
+       This is not Telegram proxy latency.
+       ========================================== */
+
+    async function measurePing() {
+      const samples = [];
+
+      for (let i = 0; i < CONFIG.pingAttempts; i++) {
+        const start = performance.now();
+
+        try {
+          const response = await fetch(
+            CONFIG.speedTestURL + "?bytes=0&onx=" + Date.now() + "-" + i,
+            {
+              method: "GET",
+              cache: "no-store",
+              mode: "cors",
+              signal: AbortSignal.timeout(7000)
+            }
+          );
+
+          if (!response.ok) throw new Error("Ping request failed");
+
+          await response.arrayBuffer();
+
+          samples.push(performance.now() - start);
+        } catch (error) {
+          // A failed request is not counted as a successful ping.
+        }
+
+        await sleep(120);
+      }
+
+      if (!samples.length) {
+        throw new Error("تعذّر قياس Ping");
+      }
+
+      samples.sort((a, b) => a - b);
+
+      const middle = Math.floor(samples.length / 2);
+
+      const median = samples.length % 2
+        ? samples[middle]
+        : (samples[middle - 1] + samples[middle]) / 2;
+
+      return Math.round(median);
+    }
+
+    /* ==========================================
+       DOWNLOAD SPEED TEST
+       Uses a real downloaded payload.
+       ========================================== */
+
+    async function measureDownload() {
+      const bytes = CONFIG.downloadBytes;
+      const url =
+        CONFIG.speedTestURL +
+        "?bytes=" + bytes +
+        "&onx=" + Date.now();
+
+      const start = performance.now();
+
+      const response = await fetch(url, {
+        method: "GET",
+        cache: "no-store",
+        mode: "cors",
+        signal: AbortSignal.timeout(25000)
+      });
+
+      if (!response.ok) {
+        throw new Error("تعذّر تحميل بيانات اختبار السرعة");
+      }
+
+      let received = 0;
+
+      if (response.body && response.body.getReader) {
+        const reader = response.body.getReader();
+
+        while (true) {
+          const result = await reader.read();
+
+          if (result.done) break;
+
+          received += result.value.byteLength;
+
+          const progress = Math.min(80, received / bytes * 80);
+          setProgress(progress);
+        }
+      } else {
+        const data = await response.arrayBuffer();
+        received = data.byteLength;
+      }
+
+      const seconds = (performance.now() - start) / 1000;
+
+      if (!received || seconds <= 0) {
+        throw new Error("لم تصل بيانات كافية لقياس السرعة");
+      }
+
+      return (received * 8) / seconds / 1000000;
+    }
+
+    /* ==========================================
+       UPLOAD SPEED TEST
+       Cloudflare upload endpoint.
+       ========================================== */
+
+    async function measureUpload() {
+      const bytes = CONFIG.uploadBytes;
+      const data = new Uint8Array(bytes);
+
+      const start = performance.now();
+
+      const response = await fetch(CONFIG.uploadTestURL, {
+        method: "POST",
+        mode: "cors",
+        cache: "no-store",
+        headers: {
+          "Content-Type": "application/octet-stream"
+        },
+        body: data,
+        signal: AbortSignal.timeout(25000)
+      });
+
+      if (!response.ok) {
+        throw new Error("Upload test unavailable");
+      }
+
+      const seconds = (performance.now() - start) / 1000;
+
+      if (seconds <= 0) {
+        throw new Error("Invalid upload measurement");
+      }
+
+      return (bytes * 8) / seconds / 1000000;
+    }
+
+    /* ==========================================
+       FULL INTERNET TEST
+       ========================================== */
+
+    async function runSpeedTest() {
+      if (testRunning) return;
+
+      testRunning = true;
+
+      const button = $("testButton");
+      const track = $("progressTrack");
+      const note = $("testNote");
+
+      button.disabled = true;
+      track.classList.add("active");
+      button.innerHTML =
+        '<i data-lucide="loader-circle" class="spin"></i><span>جاري فحص الشبكة...</span>';
+
+      if (window.lucide) lucide.createIcons();
+
+      setProgress(5);
+
+      $("downloadValue").textContent = "--.--";
+      $("pingValue").textContent = "---";
+      $("uploadValue").textContent = "--.--";
+
+      note.textContent = "جاري قياس زمن الاستجابة وسرعة التنزيل والإرسال...";
+
+      try {
+        if (!navigator.onLine) {
+          throw new Error("الجهاز غير متصل بالإنترنت");
+        }
+
+        setInternetStatus(true, "INTERNET AVAILABLE");
+
+        const pingPromise = measurePing();
+
+        setProgress(15);
+
+        const download = await measureDownload();
+
+        $("downloadValue").textContent = formatMbps(download);
+
+        setProgress(85);
+
+        speedHistory.push(download);
+        speedHistory = speedHistory.slice(-12);
+
+        drawChart();
+
+        let ping = null;
+
+        try {
+          ping = await pingPromise;
+          $("pingValue").textContent = ping;
+        } catch (error) {
+          $("pingValue").textContent = "N/A";
+        }
+
+        setProgress(90);
+
+        try {
+          const upload = await measureUpload();
+          $("uploadValue").textContent = formatMbps(upload);
+        } catch (error) {
+          $("uploadValue").textContent = "N/A";
+        }
+
+        setProgress(100);
+
+        note.textContent =
+          "اكتمل الاختبار. النتائج تخص اتصال الإنترنت بين جهازك وخادم القياس، ولا تمثل سرعة بروكسي تيليجرام.";
+
+        showToast("اكتمل اختبار أداء الإنترنت");
+
+      } catch (error) {
+        setInternetStatus(
+          navigator.onLine,
+          navigator.onLine ? "TEST UNAVAILABLE" : "NO INTERNET"
+        );
+
+        note.textContent =
+          "تعذّر إكمال الاختبار. تحقق من اتصال الإنترنت أو جرّب مرة أخرى. قد تمنع بعض الشبكات الوصول إلى خادم القياس.";
+
+        showToast(error.message || "تعذّر إجراء اختبار السرعة");
+
+      } finally {
+        await sleep(400);
+
+        setProgress(0);
+        track.classList.remove("active");
+
+        button.disabled = false;
+        button.innerHTML =
+          '<i data-lucide="refresh-cw"></i><span>إعادة اختبار سرعة الإنترنت</span>';
+
+        if (window.lucide) lucide.createIcons();
+
+        testRunning = false;
+      }
+    }
+
+    /* ==========================================
+       SERVER LOCATION
+       DNS lookup then IP geolocation.
+       Location is approximate.
+       ========================================== */
+
+    async function detectServerLocation() {
+      try {
+        $("serverCountry").textContent = "جارٍ التحديد...";
+        $("serverCity").textContent = "SERVER IP LOCATION";
+
+        const dnsResponse = await fetch(
+          CONFIG.locationDNS + "?name=utkapay.life&type=A",
+          {
+            cache: "no-store",
+            signal: AbortSignal.timeout(9000)
+          }
+        );
+
+        if (!dnsResponse.ok) throw new Error("DNS unavailable");
+
+        const dnsData = await dnsResponse.json();
+
+        const record = (dnsData.Answer || []).find(item =>
+          item.type === 1 &&
+          /^\d{1,3}(\.\d{1,3}){3}$/.test(item.data)
+        );
+
+        if (!record) throw new Error("No IPv4 record");
+
+        const geoResponse = await fetch(
+          CONFIG.locationAPI + "/" + encodeURIComponent(record.data),
+          {
+            cache: "no-store",
+            signal: AbortSignal.timeout(9000)
+          }
+        );
+
+        if (!geoResponse.ok) throw new Error("Location unavailable");
+
+        const geo = await geoResponse.json();
+
+        if (!geo.success) throw new Error("Geolocation unavailable");
+
+        $("serverCountry").textContent =
+          (geo.country_code ? geo.country_code + " · " : "") +
+          (geo.country || "Unknown");
+
+        $("serverCity").textContent =
+          [geo.city, geo.region].filter(Boolean).join(" · ") ||
+          "APPROXIMATE SERVER LOCATION";
+
+      } catch (error) {
+        $("serverCountry").textContent = "غير معروف";
+        $("serverCity").textContent = "تعذّر تحديد الموقع";
+      }
+    }
+
+    /* ==========================================
+       PROXY CHECK
+       This checks DNS reachability only.
+       It cannot confirm MTProto connectivity.
+       ========================================== */
+
+    async function checkProxyServer() {
+      setProxyStatus("checking", "جاري فحص الخادم");
+
+      try {
+        const response = await fetch(
+          CONFIG.locationDNS + "?name=utkapay.life&type=A",
+          {
+            cache: "no-store",
+            signal: AbortSignal.timeout(8000)
+          }
+        );
+
+        if (!response.ok) throw new Error("DNS check failed");
+
+        const data = await response.json();
+
+        const hasIP = (data.Answer || []).some(
+          item => item.type === 1 || item.type === 28
+        );
+
+        if (!hasIP) throw new Error("No DNS record");
+
+        setProxyStatus("online", "الخادم قابل للوصول");
+
+      } catch (error) {
+        setProxyStatus("offline", "تعذّر فحص الخادم");
+      }
+    }
+
+    /* ==========================================
+       TELEGRAM PROXY ACTIVATION
+       Opens Telegram's MTProto proxy link.
+       Browser cannot verify Telegram's final state.
+       ========================================== */
+
+    function launchTelegramLink(url, message) {
+      // Must be called directly from a user gesture on Android browsers/WebViews.
+      showToast(message);
+      try {
+        const link = document.createElement("a");
+        link.href = url;
+        link.rel = "noopener";
+        link.style.position = "fixed";
+        link.style.left = "-9999px";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function activateProxy() {
+      const button = $("connectButton");
+      button.disabled = true;
+      $("connectHint").textContent =
+        "إذا لم يظهر تيليجرام، اضغط زر فتح الرابط واختيار التطبيق أسفل هذا الزر.";
+      launchTelegramLink(CONFIG.proxyURL,
+        "تم إرسال رابط البروكسي. أكمل الإضافة من شاشة تيليجرام إذا ظهرت.");
+      setTimeout(() => { button.disabled = false; }, 1400);
+    }
+
+    function openProxyUniversal() {
+      launchTelegramLink(CONFIG.proxyWebURL,
+        "نحاول فتح رابط البروكسي عبر تطبيق تيليجرام المتاح على جهازك.");
+    }
+
+    function normalizeBotUsername(value) {
+      return String(value || "").trim().replace(/^https?:\/\/(www\.)?t\.me\//i, "").replace(/^@/, "").replace(/\/$/, "");
+    }
+
+    function isValidBotUsername(value) {
+      return /^[A-Za-z0-9_]{5,32}$/.test(value);
+    }
+
+    function openBotModal() {
+      const saved = localStorage.getItem(CONFIG.botStorageKey) || "";
+      $("botUsernameInput").value = saved;
+      $("botModal").classList.add("open");
+      setTimeout(() => $("botUsernameInput").focus(), 80);
+    }
+
+    function closeBotModal() {
+      $("botModal").classList.remove("open");
+    }
+
+    function openConfiguredBot() {
+      const username = normalizeBotUsername(localStorage.getItem(CONFIG.botStorageKey));
+      if (!isValidBotUsername(username)) {
+        openBotModal();
+        return;
+      }
+      const botURL = "https://t.me/" + encodeURIComponent(username);
+      launchTelegramLink(botURL,
+        "يتم فتح البوت في تيليجرام. سيستخدم البروكسي إذا كان مفعّلاً داخل نفس نسخة التطبيق.");
+    }
+
+    function saveAndOpenBot() {
+      const username = normalizeBotUsername($("botUsernameInput").value);
+      if (!isValidBotUsername(username)) {
+        showToast("اكتب معرف بوت صحيحاً من 5 إلى 32 حرفاً أو رقماً أو _");
+        $("botUsernameInput").focus();
+        return;
+      }
+      localStorage.setItem(CONFIG.botStorageKey, username);
+      $("botButtonLabel").textContent = "فتح البوت @" + username;
+      $("botStatusText").textContent = "تم حفظ @" + username + " على هذا الجهاز. تأكد أولاً من إضافة البروكسي داخل تيليجرام.";
+      closeBotModal();
+      openConfiguredBot();
+    }
+
+    function initializeBotControls() {
+      const saved = normalizeBotUsername(localStorage.getItem(CONFIG.botStorageKey));
+      if (isValidBotUsername(saved)) {
+        $("botButtonLabel").textContent = "فتح البوت @" + saved;
+        $("botStatusText").textContent = "البوت المحفوظ: @" + saved + ". سيعمل عبر اتصال تيليجرام الحالي إذا كان البروكسي مفعّلاً فيه.";
+      }
+      $("botOpenButton").addEventListener("click", openConfiguredBot);
+      $("botSaveButton").addEventListener("click", saveAndOpenBot);
+      $("botCancelButton").addEventListener("click", closeBotModal);
+      $("botModal").addEventListener("click", event => {
+        if (event.target === $("botModal")) closeBotModal();
+      });
+      $("botUsernameInput").addEventListener("keydown", event => {
+        if (event.key === "Enter") saveAndOpenBot();
+        if (event.key === "Escape") closeBotModal();
+      });
+    }
+
+    /* ==========================================
+       SPEED CHART
+       Lightweight canvas chart, no chart library.
+       ========================================== */
+
+    function drawChart() {
+      const canvas = $("speedChart");
+      const rect = canvas.getBoundingClientRect();
+
+      if (!rect.width || !rect.height) return;
+
+      const dpr = window.devicePixelRatio || 1;
+
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+
+      const ctx = canvas.getContext("2d");
+
+      ctx.scale(dpr, dpr);
+
+      const width = rect.width;
+      const height = rect.height;
+
+      ctx.clearRect(0, 0, width, height);
+
+      const pad = 8;
+      const values = speedHistory.length
+        ? speedHistory
+        : [0, 0, 0, 0, 0, 0];
+
+      const max = Math.max(...values, 10) * 1.2;
+      const points = values.map((value, index) => ({
+        x: pad + (index / Math.max(values.length - 1, 1)) * (width - pad * 2),
+        y: height - pad - (value / max) * (height - pad * 2)
+      }));
+
+      ctx.strokeStyle = "rgba(255,255,255,.055)";
+      ctx.lineWidth = 1;
+
+      for (let i = 1; i <= 3; i++) {
+        const y = (height / 4) * i;
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+
+      if (!speedHistory.length) return;
+
+      const gradient = ctx.createLinearGradient(0, 0, 0, height);
+      gradient.addColorStop(0, "rgba(216,184,120,.28)");
+      gradient.addColorStop(1, "rgba(216,184,120,0)");
+
+      ctx.beginPath();
+      points.forEach((point, index) => {
+        if (index === 0) ctx.moveTo(point.x, point.y);
+        else ctx.lineTo(point.x, point.y);
+      });
+
+      ctx.lineTo(points[points.length - 1].x, height);
+      ctx.lineTo(points[0].x, height);
+      ctx.closePath();
+
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      ctx.beginPath();
+      points.forEach((point, index) => {
+        if (index === 0) ctx.moveTo(point.x, point.y);
+        else ctx.lineTo(point.x, point.y);
+      });
+
+      ctx.strokeStyle = "#d8b878";
+      ctx.lineWidth = 2;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.shadowColor = "rgba(216,184,120,.5)";
+      ctx.shadowBlur = 9;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      const last = points[points.length - 1];
+
+      ctx.beginPath();
+      ctx.arc(last.x, last.y, 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = "#f3dfb1";
+      ctx.fill();
+    }
+
+
+    /* LIVE TELEGRAMVPN DIRECTORY — through same-origin CORS worker */
+    let pxRows=[], pxPage=1, pxPages=1, pxBusy=false;
+    const PX_FIXED={id:'onx-fixed',server:'utkapay.life',port:443,country_name:'البروكسي الثابت الخاص بك',city:'Custom',ping:null,status:'unknown',url:CONFIG.proxyURL,uptime:null};
+    const pxEsc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    function pxActive(p){return String(p.status||'').toLowerCase()==='active';}
+    function pxLink(p){if(p.url&&/^tg:\/\/proxy\?/i.test(p.url))return p.url;if(p.server&&p.port&&p.secret)return 'tg://proxy?'+new URLSearchParams({server:p.server,port:String(p.port),secret:p.secret});return '';}
+    function pxNormalize(j){let a=Array.isArray(j)?j:(j.proxies||j.data||j.results||j.items||j.nodes||[]);if(!Array.isArray(a)&&a&&typeof a==='object')a=Object.values(a);if(!Array.isArray(a))throw Error('لم أجد مصفوفة البروكسيات في JSON');return a;}
+    function pxSort(a){return [...a].sort((x,y)=>{let d=Number(pxActive(y))-Number(pxActive(x));if(d)return d;let xp=Number.isFinite(Number(x.ping))?Number(x.ping):1e12,yp=Number.isFinite(Number(y.ping))?Number(y.ping):1e12;return xp-yp;});}
+    function pxRender(){let list=$('pxList');if(!pxRows.length){list.innerHTML='<div class="proxy-error">لا توجد نتائج بروكسيات حالياً.</div>';return;}list.innerHTML=pxSort(pxRows).map((p,i)=>{let active=pxActive(p),country=p.country_name||p.country||p.country_code||'دولة غير معروفة',link=pxLink(p);return `<article class="proxy-entry ${i===0&&active?'best':''}"><div class="proxy-entry-top"><div><div class="proxy-entry-name">${pxEsc(p.flag||'🌐')} ${pxEsc(country)}</div><div class="proxy-entry-sub">${pxEsc(p.city||'')} · ${pxEsc(p.server||'')}</div></div><span class="proxy-badge ${active?'':'down'}">${active?'فعّال حسب API':(p.status==='unknown'?'رابط ثابت':'متوقف حسب API')}</span></div><div class="proxy-metrics"><div><small>Ping</small><b>${p.ping==null?'—':pxEsc(p.ping)+' ms'}</b></div><div><small>Uptime</small><b>${p.uptime==null?'—':pxEsc(p.uptime)+'%'}</b></div><div><small>Port</small><b>${p.port==null?'—':pxEsc(p.port)}</b></div></div><div class="proxy-actions"><button class="proxy-go" data-px-connect="${pxEsc(p.id)}" ${link?'':'disabled'}>اتصال عبر Telegram</button></div></article>`;}).join('');}
+    async function pxRequest(path){let base=CONFIG.proxyApiBase;if(base.includes('REPLACE-WITH-YOUR-WORKER'))throw Error('لم يتم ضبط رابط وسيط Cloudflare Worker بعد');let r=await fetch(base.replace(/\/$/,'')+path,{cache:'no-store',headers:{Accept:'application/json'},signal:AbortSignal.timeout(15000)});let body=await r.text();if(!r.ok)throw Error('Worker HTTP '+r.status+': '+body.slice(0,180));try{return JSON.parse(body)}catch{throw Error('استجابة الوسيط ليست JSON: '+body.slice(0,120));}}
+    async function pxStats(){try{let s=await pxRequest('/stats');s=s.stats||s.data||s;$('pxOnline').textContent=s.online??s.active??'—';$('pxDead').textContent=s.dead??s.inactive??'—';$('pxTotal').textContent=s.total??'—';}catch(e){console.warn('stats:',e.message);}}
+    async function pxLoad(more=false){if(pxBusy)return;pxBusy=true;$('pxRefresh').disabled=true;try{let page=more?pxPage+1:1;let q='?page='+page+'&per='+CONFIG.proxyPageSize+'&sort=ping&status=active&for=IQ';let j=await pxRequest('/proxies'+q);let a=pxNormalize(j);pxPages=Number(j.pages||j.pagination?.pages||j.meta?.pages||1);if(!more)pxRows=[];let m=new Map(pxRows.map(x=>[String(x.id),x]));a.forEach((p,i)=>{if(p.id==null)p.id=p.server+':'+p.port;m.set(String(p.id),p);});m.set(PX_FIXED.id,PX_FIXED);pxRows=pxSort([...m.values()]);pxPage=page;pxRender();$('pxUpdated').textContent='آخر تحديث '+new Date().toLocaleTimeString('ar-IQ');$('pxMore').hidden=pxPage>=pxPages;await pxStats();}catch(e){console.error(e);$('pxUpdated').textContent='فشل الاتصال بالخدمة';if(!pxRows.length)$('pxList').innerHTML='<div class="proxy-error">تعذّر جلب البروكسيات: '+pxEsc(e.message)+'<br>تحقق من نشر Cloudflare Worker وضبط رابطه في CONFIG.proxyApiBase.</div>';}finally{pxBusy=false;$('pxRefresh').disabled=false;}}
+    function pxInit(){ $('pxRefresh').addEventListener('click',()=>pxLoad(false));$('pxMore').addEventListener('click',()=>pxLoad(true));$('pxList').addEventListener('click',e=>{let b=e.target.closest('[data-px-connect]');if(!b)return;let p=pxRows.find(x=>String(x.id)===b.dataset.pxConnect);let u=p&&pxLink(p);if(u)launchTelegramLink(u,'تم فتح رابط البروكسي في Telegram. أكمل الاتصال داخل التطبيق.');});pxLoad(false);setInterval(()=>{if(!document.hidden)pxLoad(false);},CONFIG.proxyRefreshMs);}
+
+
+    function vipWrapPanels(){
+      const main=document.querySelector("main.app"),nav=main.querySelector(".vip-tabs");
+      const footer=main.querySelector(".footer");
+      const adminConsole=main.querySelector("#adminConsole");
+      const original=[...main.children].filter(el=>el!==nav&&el!==footer&&el!==adminConsole&&!el.classList.contains("topbar"));
+      const panels={home:document.createElement("div"),proxies:document.createElement("div"),performance:document.createElement("div")};
+      Object.entries(panels).forEach(([k,p])=>{p.className="vip-panel"+(k==="home"?" active":"");p.id="panel-"+k;});
+      let mode="home";
+      original.forEach(el=>{
+        if(el.matches(".section-heading") && /قائمة بروكسيات/.test(el.textContent))mode="proxies";
+        if(el.matches(".section-heading") && /أداء اتصال الإنترنت|مخطط أداء الشبكة/.test(el.textContent))mode="performance";
+        if(el.matches(".proxy-directory"))mode="proxies";
+        if(el.matches(".stats-grid,.chart-card"))mode="performance";
+        panels[mode].appendChild(el);
+      });
+      nav.after(panels.home,panels.proxies,panels.performance);
+      if(adminConsole) main.insertBefore(adminConsole,footer);
+      const headings={home:["الرئيسية","اتصالك الخاص بتجربة VIP"],proxies:["شبكة البروكسيات","قائمة حية من مصدر API المرتبط"],performance:["أداء الشبكة","قياسات فعلية من جهازك"]};
+      Object.entries(headings).forEach(([k,v])=>{const h=document.createElement("div");h.className="panel-intro";h.innerHTML=`<div><h2>${v[0]}</h2><p>${v[1]}</p></div>`;panels[k].prepend(h);});
+    }
+    function vipInit(){
+      vipWrapPanels();
+      document.querySelectorAll(".vip-tab").forEach(b=>b.addEventListener("click",()=>{
+        document.querySelectorAll(".vip-tab").forEach(x=>x.classList.toggle("active",x===b));
+        document.querySelectorAll(".vip-panel").forEach(p=>p.classList.toggle("active",p.id==="panel-"+b.dataset.tab));
+        if(b.dataset.tab==="performance")requestAnimationFrame(drawChart);
+        if(window.lucide)lucide.createIcons();
+      }));
+      const clock=()=>{const d=new Date();$("vipClock").textContent=d.toLocaleTimeString("en-GB",{hour12:false});$("vipDate").textContent=d.toLocaleDateString("ar-IQ",{weekday:"long",day:"numeric",month:"long"});};
+      clock();setInterval(clock,1000);
+      const key="onx_vip_visits";let visits=+(localStorage.getItem(key)||0)+1;localStorage.setItem(key,String(visits));$("localVisits").textContent=visits.toLocaleString("en-US");
+      const bytes=new Blob([Object.keys(localStorage).map(k=>k+"="+localStorage.getItem(k)).join("&")]).size;
+      $("localStorageSize").textContent=bytes<1024?bytes+" B":(bytes/1024).toFixed(2)+" KB";$("storageBar").style.width=Math.min(100,bytes/51200*100)+"%";
+      const colors={gold:["#d9b875","#a9874c","#f3dfb1"],blue:["#8bb9e8","#547eaf","#d5e9ff"],violet:["#b5a0ed","#8069bd","#e4d9ff"],emerald:["#7ed7b0","#438e6b","#d4ffea"]};
+      function theme(n){let c=colors[n]||colors.gold;["--gold","--gold-2","--gold-light"].forEach((k,i)=>document.documentElement.style.setProperty(k,c[i]));localStorage.setItem("onx-vip-theme",n);document.querySelectorAll("[data-theme]").forEach(x=>x.setAttribute("aria-pressed",String(x.dataset.theme===n)));}
+      function bg(n){let m={default:"radial-gradient(ellipse at 50% -15%,#ab84422b,transparent 42%),#08090b",midnight:"radial-gradient(ellipse at 15% 0%,#173a663d,transparent 45%),#050811",carbon:"repeating-linear-gradient(135deg,#ffffff05 0 1px,transparent 1px 5px),#090a0c",aurora:"radial-gradient(ellipse at 80% 10%,#235d5b55,transparent 40%),radial-gradient(ellipse at 10% 70%,#4c316655,transparent 40%),#07090d"};document.body.style.background=m[n]||m.default;localStorage.setItem("onx-vip-bg",n);}
+      document.querySelectorAll("[data-theme]").forEach(x=>x.addEventListener("click",()=>theme(x.dataset.theme)));
+      document.querySelectorAll("[data-bg]").forEach(x=>x.addEventListener("click",()=>bg(x.dataset.bg)));
+      theme(localStorage.getItem("onx-vip-theme")||"gold");bg(localStorage.getItem("onx-vip-bg")||"default");
+    }
+    let adminToken=null,adminData=null,adminMap=null,adminMarkers=[],adminFilter='all',adminAlertTimer=null;
+    const adminEsc=v=>String(v??'—').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    function adminNotify(message){const el=$('adminAlert');el.textContent=message;el.classList.add('show');clearTimeout(adminAlertTimer);adminAlertTimer=setTimeout(()=>el.classList.remove('show'),4600);}
+    async function adminReq(path,options={}){const base=CONFIG.proxyApiBase.replace(/\/$/,''),headers={'Accept':'application/json',...(options.body?{'Content-Type':'application/json'}:{}),...(adminToken?{'Authorization':'Bearer '+adminToken}:{})};const r=await fetch(base+path,{...options,headers,cache:'no-store',signal:AbortSignal.timeout(18000)});const t=await r.text();let j={};try{j=JSON.parse(t)}catch{}if(!r.ok)throw Error(j.error||j.message||('HTTP '+r.status+' · API الإدارة غير مهيأ'));return j;}
+    function adminUnwrapArray(value){
+      let v=value;
+      for(let i=0;i<4;i++){
+        if(Array.isArray(v))return v;
+        if(!v||typeof v!=='object')return [];
+        const next=v.items??v.proxies??v.results??v.nodes??v.data??v.list;
+        if(next===undefined)break;
+        v=next;
+      }
+      return v&&typeof v==='object'?Object.values(v).filter(x=>x&&typeof x==='object'):[];
+    }
+    function adminProxies(){return adminUnwrapArray(adminData?.proxies);}
+    function adminIsUp(p){const s=String(p.status??p.state??'').toLowerCase();if(p.active===false||['inactive','offline','down','dead','disabled','stopped'].includes(s))return false;return p.active===true||['active','online','working','up','alive','ok'].includes(s);}
+    function adminRenderProxies(){let rows=adminProxies();if(adminFilter==='active')rows=rows.filter(adminIsUp);if(adminFilter==='inactive')rows=rows.filter(p=>!adminIsUp(p));$('adProxyList').innerHTML=rows.length?rows.map((p,i)=>{let id=p.id??p.server+':'+p.port;return `<article class="admin-proxy" data-admin-proxy="${adminEsc(id)}"><div class="admin-proxy-top"><div class="admin-proxy-name">${adminEsc(p.country_name||p.country||p.name||'Proxy')} · ${adminEsc(p.city||p.server||'')}</div><span class="admin-proxy-state ${adminIsUp(p)?'':'down'}">${adminIsUp(p)?'● ACTIVE':'● OFFLINE'}</span></div><div class="admin-proxy-meta"><span>${adminEsc(p.server||'—')}</span><span>PORT ${adminEsc(p.port||'—')}</span><span>PING ${p.ping==null?'—':adminEsc(p.ping)+'ms'}</span><span>USERS ${adminEsc(p.users_count??p.user_count??p.connections??'—')}</span></div></article>`}).join(''):'<div class="admin-state">لا توجد سجلات ضمن هذا التصنيف في بيانات الخادم.';}
+    function adminShowProxy(id){const p=adminProxies().find(x=>String(x.id??x.server+':'+x.port)===String(id));if(!p)return;const fields=[['الحالة',adminIsUp(p)?'يعمل':'متوقف'],['عنوان الخادم',p.server],['المنفذ',p.port],['النوع',p.type||'MTProto'],['الدولة',p.country_name||p.country],['المدينة',p.city],['Ping',p.ping==null?null:p.ping+' ms'],['Uptime',p.uptime==null?null:p.uptime+'%'],['عدد المستخدمين',p.users_count??p.user_count],['الاتصالات',p.connections??p.connection_count],['آخر فحص',p.last_check||p.checked_at],['آخر نشاط',p.last_seen],['السر',p.secret],['رابط الاتصال',p.url||p.link],['خط العرض',p.latitude??p.lat],['خط الطول',p.longitude??p.lon],['المعرّف',p.id]];$('adProxyDetail').innerHTML=`<div class="admin-detail-grid">${fields.filter(x=>x[1]!=null&&x[1]!=='').map(x=>`<div class="admin-detail"><small>${adminEsc(x[0])}</small><b>${adminEsc(x[1])}</b></div>`).join('')}</div>`;if(p.latitude!=null&&p.longitude!=null&&adminMap){adminMap.setView([Number(p.latitude),Number(p.longitude)],7);}}
+    function adminMapRender(){if(!window.L)return;let mapEl=$('adminMap');if(!adminMap){adminMap=L.map(mapEl,{zoomControl:true,scrollWheelZoom:false}).setView([25,45],3);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap'}).addTo(adminMap);}adminMarkers.forEach(m=>m.remove());adminMarkers=[];adminProxies().forEach(p=>{let lat=Number(p.latitude??p.lat),lon=Number(p.longitude??p.lon);if(!Number.isFinite(lat)||!Number.isFinite(lon)||Math.abs(lat)>90||Math.abs(lon)>180)return;let marker=L.circleMarker([lat,lon],{radius:8,color:adminIsUp(p)?'#d9bd7a':'#d97872',fillOpacity:.8,weight:2}).addTo(adminMap);marker.bindPopup(`<b>${adminEsc(p.country||p.name||p.server)}</b><br>${adminEsc(p.server)}:${adminEsc(p.port)}<br>${adminIsUp(p)?'ACTIVE':'OFFLINE'}`);adminMarkers.push(marker);});setTimeout(()=>adminMap.invalidateSize(),120);}
+    function adminRenderEvents(){const ev=adminData?.events||adminData?.recent_events||[];$('adEvents').innerHTML=ev.length?ev.slice(0,30).map(e=>`<div class="admin-event"><i data-lucide="radio-tower"></i><span>${adminEsc(e.message||e.username||e.user||'حدث اتصال')} · ${adminEsc(e.proxy_name||e.proxy||'بروكسي غير محدد')} · ${adminEsc(e.created_at||e.time||'')}</span></div>`).join(''):'لا توجد أحداث اتصال مسجلة من الخادم.';if(window.lucide)lucide.createIcons();}
+    async function adminRefresh(){
+      const d=await adminReq('/admin/overview');adminData=d;
+      let stats=d.stats||d.overview||{};
+      if(stats&&stats.stats)stats=stats.stats;
+      const proxies=adminProxies();
+      const total=stats.total_proxies??stats.total??proxies.length;
+      const up=stats.active_proxies??stats.online??proxies.filter(adminIsUp).length;
+      const down=stats.inactive_proxies??stats.dead??stats.offline??Math.max(0,Number(total)-Number(up));
+      const users=stats.total_users??stats.users_count??(Array.isArray(d.users)?d.users.length:'—');
+      $('adProxyTotal').textContent=total;$('adProxyUp').textContent=up;$('adProxyDown').textContent=down;
+      $('adUsers').textContent=users;$('adUserTotal').textContent=users;
+      $('adNewUsers').textContent=stats.new_users??stats.new_users_today??'—';
+      $('adConnections').textContent=stats.total_connections??stats.connections??'—';
+      adminRenderProxies();adminRenderEvents();adminMapRender();
+      $('adUpdated').textContent='آخر مزامنة: '+new Date().toLocaleString('ar-IQ');
+      $('adminConsole').classList.add('open');
+      if(window.lucide)lucide.createIcons();
+      adminNotify('تم تحديث بيانات مركز التحكم');
+    }
+    function adminInit(){
+      const open=()=>{if(adminToken){$('adminConsole').classList.add('open');adminRefresh().catch(e=>adminNotify(e.message));}else{$('adminGate').classList.add('open');setTimeout(()=>$('adminPassword').focus(),150);}};
+      $('adminLaunch').addEventListener('click',open);
+      $('adminGateCancel').addEventListener('click',()=>$('adminGate').classList.remove('open'));
+      $('adminClose').addEventListener('click',()=>$('adminConsole').classList.remove('open'));
+      $('adminRefresh').addEventListener('click',()=>adminRefresh().catch(e=>adminNotify('فشل التحديث: '+e.message)));
+      $('adminLoginButton').addEventListener('click',async()=>{
+        const password=$('adminPassword').value;
+        if(!password){$('adminMessage').textContent='أدخل كلمة المرور أولاً.';return;}
+        const b=$('adminLoginButton');b.disabled=true;b.textContent='جارٍ التحقق...';
+        try{
+          const d=await adminReq('/admin/login',{method:'POST',body:JSON.stringify({password})});
+          if(!d.token)throw Error('الخادم لم يرجع رمز جلسة');
+          adminToken=d.token;$('adminPassword').value='';$('adminGate').classList.remove('open');
+          await adminRefresh();
+        }catch(e){$('adminMessage').textContent='تعذر تسجيل الدخول: '+e.message;}
+        finally{b.disabled=false;b.textContent='تحقق وفتح اللوحة';}
+      });
+      $('adminPassword').addEventListener('keydown',e=>{if(e.key==='Enter')$('adminLoginButton').click();});
+      $('adProxyList').addEventListener('click',e=>{let card=e.target.closest('[data-admin-proxy]');if(card)adminShowProxy(card.dataset.adminProxy);});
+      document.querySelectorAll('[data-proxy-filter]').forEach(b=>b.addEventListener('click',()=>{adminFilter=b.dataset.proxyFilter;adminRenderProxies();}));
+      $('adminExport').addEventListener('click',()=>{
+        if(!adminData)return adminNotify('لا توجد بيانات لتصديرها');
+        const report={exported_at:new Date().toISOString(),...adminData};
+        const blob=new Blob([JSON.stringify(report,null,2)],{type:'text/plain;charset=utf-8'});
+        const a=document.createElement('a');const objectUrl=URL.createObjectURL(blob);
+        a.href=objectUrl;a.download='ONX-PROXY-REPORT-'+new Date().toISOString().slice(0,10)+'.txt';
+        document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(objectUrl),1500);
+        adminNotify('تم تجهيز ملف التقرير TXT');
+      });
+      setInterval(()=>{if(adminToken&&$('adminConsole').classList.contains('open')&&!document.hidden){adminRefresh().catch(e=>{if(String(e.message).includes('Unauthorized')||String(e.message).includes('401')){adminToken=null;$('adminConsole').classList.remove('open');$('adminGate').classList.add('open');$('adminMessage').textContent='انتهت الجلسة. سجّل الدخول مجدداً.';}else adminNotify('تعذر تحديث البيانات: '+e.message);});}},60000);
+    }
+
+    /* ==========================================
+       APP INITIALIZATION
+       ========================================== */
+
+    async function initializeApp() {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+
+      readNetworkType();
+      drawChart();
+      vipInit();
+      adminInit();
+
+      if (navigator.onLine) {
+        setInternetStatus(true, "INTERNET AVAILABLE");
+      } else {
+        setInternetStatus(false, "NO INTERNET");
+      }
+
+      window.addEventListener("online", () => {
+        setInternetStatus(true, "INTERNET AVAILABLE");
+        showToast("عاد اتصال الإنترنت");
+      });
+
+      window.addEventListener("offline", () => {
+        setInternetStatus(false, "NO INTERNET");
+        showToast("انقطع اتصال الإنترنت");
+      });
+
+      $("connectButton").addEventListener("click", activateProxy);
+      $("proxyWebButton").addEventListener("click", openProxyUniversal);
+      initializeBotControls();
+      pxInit();
+
+      $("testButton").addEventListener("click", runSpeedTest);
+
+      window.addEventListener("resize", drawChart);
+
+      detectServerLocation();
+      checkProxyServer();
+
+      if (navigator.onLine) {
+        runSpeedTest();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", initializeApp);
+
+    /* Disable basic text selection and context menu. */
+    document.addEventListener("contextmenu", event => {
+      event.preventDefault();
+    });
+
+    document.addEventListener("dragstart", event => {
+      event.preventDefault();
+    });
+
+  </script>
+</body>
+</html>

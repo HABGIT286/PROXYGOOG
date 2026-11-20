@@ -1,0 +1,6 @@
+{
+  "name": "ONIXTETL — ONX44 APP PROXY",
+  "description": "Elite MTProto Proxy Gateway, 3D Network Telemetry & Command Center",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
